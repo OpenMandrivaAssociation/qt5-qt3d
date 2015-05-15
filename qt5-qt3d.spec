@@ -1,4 +1,4 @@
-%define beta alpha
+%define beta beta
 %define qttarballdir qt3d-opensource-src-%{version}%{?beta:-%{beta}}
 %define major %(echo %{version}|cut -d. -f1)
 
@@ -15,7 +15,7 @@
 
 Name:		qt5-qt3d
 Version:	5.5.0
-Release:	%{?beta:0.%{beta}.}1
+Release:	0.%{beta}.1
 Source0:	http://download.qt.io/%{?beta:development}%{!?beta:official}_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}%{?beta:-%{beta}}/submodules/%{qttarballdir}.tar.xz
 Summary:	Qt 3D toolkit
 Group:		System/Libraries
