@@ -25,6 +25,7 @@ BuildRequires:	qt5-qtbase-devel
 BuildRequires:	pkgconfig(Qt5Core)
 BuildRequires:	pkgconfig(Qt5Gui)
 BuildRequires:	pkgconfig(Qt5Quick)
+BuildRequires:	qt5-qtqml-private-devel
 Requires:	%{core} = %{EVRD}
 Requires:	%{input} = %{EVRD}
 Requires:	%{quick} = %{EVRD}
