@@ -33,7 +33,7 @@ Requires:	%{quickrenderer} = %{EVRD}
 Requires:	%{renderer} = %{EVRD}
 
 %description
-Qt5 3D API
+Qt5 3D API.
 
 %files
 
@@ -48,6 +48,7 @@ Requires:	%{quickrendererd} = %{EVRD}
 Requires:	%{rendererd} = %{EVRD}
 
 %files devel
+%{_libdir}/qt5/examples/qt3d
 
 # =====
 %package -n %{core}
@@ -55,7 +56,7 @@ Summary:	Qt3D core library
 Group:		System/Libraries
 
 %description -n %{core}
-Qt3D core library
+Qt3D core library.
 
 %files -n %{core}
 %{_libdir}/libQt%{major}3DCore.so.%{major}*
@@ -66,7 +67,7 @@ Group:		Development/KDE and Qt
 Requires:	%{core} = %{EVRD}
 
 %description -n %{cored}
-Development files for the Qt3D core library
+Development files for the Qt3D core library.
 
 %files -n %{cored}
 %{_includedir}/qt%{major}/Qt3DCore
@@ -83,7 +84,7 @@ Summary:	Qt3D input library
 Group:		System/Libraries
 
 %description -n %{input}
-Qt3D input library
+Qt3D input library.
 
 %files -n %{input}
 %{_libdir}/libQt%{major}3DInput.so.%{major}*
@@ -94,7 +95,7 @@ Group:		Development/KDE and Qt
 Requires:	%{input} = %{EVRD}
 
 %description -n %{inputd}
-Development files for the Qt3D input library
+Development files for the Qt3D input library.
 
 %files -n %{inputd}
 %{_includedir}/qt%{major}/Qt3DInput
@@ -111,7 +112,7 @@ Summary:	Qt3D QtQuick library
 Group:		System/Libraries
 
 %description -n %{quick}
-Qt3D QtQuick library
+Qt3D QtQuick library.
 
 %files -n %{quick}
 %{_libdir}/libQt%{major}3DQuick.so.%{major}*
@@ -124,7 +125,7 @@ Group:		Development/KDE and Qt
 Requires:	%{quick} = %{EVRD}
 
 %description -n %{quickd}
-Development files for the Qt3D QtQuick library
+Development files for the Qt3D QtQuick library.
 
 %files -n %{quickd}
 %{_includedir}/qt%{major}/Qt3DQuick
@@ -141,7 +142,7 @@ Summary:	Qt3D QuickRenderer library
 Group:		System/Libraries
 
 %description -n %{quickrenderer}
-Qt3D QuickRenderer library
+Qt3D QuickRenderer library.
 
 %files -n %{quickrenderer}
 %{_libdir}/libQt%{major}3DQuickRenderer.so.%{major}*
@@ -152,7 +153,7 @@ Group:		Development/KDE and Qt
 Requires:	%{quickrenderer} = %{EVRD}
 
 %description -n %{quickrendererd}
-Development files for the Qt3D QuickRenderer library
+Development files for the Qt3D QuickRenderer library.
 
 %files -n %{quickrendererd}
 %{_includedir}/qt%{major}/Qt3DQuickRenderer
@@ -169,7 +170,7 @@ Summary:	Qt3D renderer library
 Group:		System/Libraries
 
 %description -n %{renderer}
-Qt3D renderer library
+Qt3D renderer library.
 
 %files -n %{renderer}
 %{_libdir}/libQt%{major}3DRenderer.so.%{major}*
@@ -180,7 +181,7 @@ Group:		Development/KDE and Qt
 Requires:	%{renderer} = %{EVRD}
 
 %description -n %{rendererd}
-Development files for the Qt3D renderer library
+Development files for the Qt3D renderer library.
 
 %files -n %{rendererd}
 %{_includedir}/qt%{major}/Qt3DRenderer
