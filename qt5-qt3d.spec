@@ -1,4 +1,4 @@
-%define beta %nil
+%define beta
 %define qttarballdir qt3d-opensource-src-%{version}%{?beta:-%{beta}}
 %define major %(echo %{version}|cut -d. -f1)
 
