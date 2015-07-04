@@ -1,5 +1,4 @@
 %define beta %nil
-%define qttarballdir qt3d-opensource-src-%{version}%{?beta:-%{beta}}
 %define major %(echo %{version}|cut -d. -f1)
 
 %define core %mklibname qt%{major}3dcore %{major}
@@ -15,8 +14,15 @@
 
 Name:		qt5-qt3d
 Version:	5.5.0
-Release:	1%{?beta:-%beta.1}
-Source0:	http://download.qt.io/%{?beta:development}%{!?beta:official}_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}%{?beta:-%{beta}}/submodules/%{qttarballdir}.tar.xz
+%if "%{beta}" != ""
+Release:	1.%{beta}.1
+%define qttarballdir qt3d-opensource-src-%{version}-%{beta}
+Source0:	http://download.qt.io/development_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}%{?beta:-%{beta}}/submodules/%{qttarballdir}.tar.xz
+%else
+Release:	1
+%define qttarballdir qt3d-opensource-src-%{version}
+Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
+%endif
 Summary:	Qt 3D toolkit
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
