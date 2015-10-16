@@ -13,7 +13,7 @@
 %define rendererd %mklibname qt%{major}3drenderer -d
 
 Name:		qt5-qt3d
-Version:	5.5.0
+Version:	5.5.1
 %if "%{beta}" != ""
 Release:	1.%{beta}.1
 %define qttarballdir qt3d-opensource-src-%{version}-%{beta}
