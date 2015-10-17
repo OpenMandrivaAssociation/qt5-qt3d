@@ -1,10 +1,14 @@
 %define beta %nil
 %define major %(echo %{version}|cut -d. -f1)
 
+%define collision %mklibname qt%{major}3dcollision %{major}
+%define collisiond %mklibname qt%{major}3dcollision -d
 %define core %mklibname qt%{major}3dcore %{major}
 %define cored %mklibname qt%{major}3dcore -d
 %define input %mklibname qt%{major}3dinput %{major}
 %define inputd %mklibname qt%{major}3dinput -d
+%define logic %mklibname qt%{major}3dlogic %{major}
+%define logicd %mklibname qt%{major}3dlogic -d
 %define quick %mklibname qt%{major}3dquick %{major}
 %define quickd %mklibname qt%{major}3dquick -d
 %define quickrenderer %mklibname qt%{major}3dquickrenderer %{major}
@@ -33,7 +37,9 @@ BuildRequires:	pkgconfig(Qt5Gui)
 BuildRequires:	pkgconfig(Qt5Quick)
 BuildRequires:	qt5-qtqml-private-devel
 Requires:	%{core} = %{EVRD}
+Requires:	%{collision} = %{EVRD}
 Requires:	%{input} = %{EVRD}
+Requires:	%{logic} = %{EVRD}
 Requires:	%{quick} = %{EVRD}
 Requires:	%{quickrenderer} = %{EVRD}
 Requires:	%{renderer} = %{EVRD}
@@ -84,6 +90,33 @@ Development files for the Qt3D core library.
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dcore.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dcore_private.pri
 
+%package -n %{collision}
+Summary:	Qt3D collision library
+Group:		System/Libraries
+
+%description -n %{collision}
+Qt3D collision library.
+
+%files -n %{collision}
+%{_libdir}/libQt%{major}3DCollision.so.%{major}*
+
+%package -n %{collisiond}
+Summary:	Development files for the Qt3D collision library
+Group:		Development/KDE and Qt
+Requires:	%{collision} = %{EVRD}
+
+%description -n %{collisiond}
+Development files for the Qt3D collision library.
+
+%files -n %{collisiond}
+%{_includedir}/qt%{major}/Qt3DCollision
+%{_libdir}/cmake/Qt%{major}3DCollision
+%{_libdir}/libQt%{major}3DCollision.so
+%{_libdir}/libQt%{major}3DCollision.prl
+%{_libdir}/pkgconfig/Qt%{major}3DCollision.pc
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dcollision.pri
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dcollision_private.pri
+
 # =====
 %package -n %{input}
 Summary:	Qt3D input library
@@ -112,6 +145,32 @@ Development files for the Qt3D input library.
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dinput.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dinput_private.pri
 
+%package -n %{logic}
+Summary:	Qt3D logic library
+Group:		System/Libraries
+
+%description -n %{logic}
+Qt3D logic library.
+
+%files -n %{logic}
+%{_libdir}/libQt%{major}3DLogic.so.%{major}*
+
+%package -n %{logicd}
+Summary:	Development files for the Qt3D logic library
+Group:		Development/KDE and Qt
+Requires:	%{logic} = %{EVRD}
+
+%description -n %{logicd}
+Development files for the Qt3D logic library.
+
+%files -n %{logicd}
+%{_includedir}/qt%{major}/Qt3DLogic
+%{_libdir}/cmake/Qt%{major}3DLogic
+%{_libdir}/libQt%{major}3DLogic.so
+%{_libdir}/libQt%{major}3DLogic.prl
+%{_libdir}/pkgconfig/Qt%{major}3DLogic.pc
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dlogic.pri
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dlogic_private.pri
 # =====
 %package -n %{quick}
 Summary:	Qt3D QtQuick library
