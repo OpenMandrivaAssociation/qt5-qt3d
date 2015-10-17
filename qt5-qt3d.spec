@@ -35,6 +35,12 @@ BuildRequires:	qt5-qtbase-devel
 BuildRequires:	pkgconfig(Qt5Core)
 BuildRequires:	pkgconfig(Qt5Gui)
 BuildRequires:	pkgconfig(Qt5Quick)
+BuildRequires:	pkgconfig(Qt5Qml)
+BuildRequires:	pkgconfig(Qt5Network)
+BuildRequires:	pkgconfig(Qt5XmlPatterns)
+BuildRequires:	pkgconfig(Qt5Declarative)
+BuildRequires:	pkgconfig(Qt5OpenGL)
+#BuildRequires:	pkgconfig(assimp)
 BuildRequires:	qt5-qtqml-private-devel
 Requires:	%{core} = %{EVRD}
 Requires:	%{collision} = %{EVRD}
@@ -43,11 +49,13 @@ Requires:	%{logic} = %{EVRD}
 Requires:	%{quick} = %{EVRD}
 Requires:	%{quickrenderer} = %{EVRD}
 Requires:	%{renderer} = %{EVRD}
+Requires:       qt5-qtimageformats >= %{version}
 
 %description
 Qt5 3D API.
 
 %files
+%{_libdir}/qt5/plugins/sceneparsers/libgltfsceneparser.so
 
 # ===
 %package devel
@@ -66,6 +74,7 @@ Requires:	%{rendererd} = %{EVRD}
 %package -n %{core}
 Summary:	Qt3D core library
 Group:		System/Libraries
+Requires:	%{name} = %{EVRD}
 
 %description -n %{core}
 Qt3D core library.
