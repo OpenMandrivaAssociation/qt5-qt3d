@@ -38,7 +38,6 @@ BuildRequires:	pkgconfig(Qt5Quick) >= %{version}
 BuildRequires:	pkgconfig(Qt5Qml) >= %{version}
 BuildRequires:	pkgconfig(Qt5Network) >= %{version}
 BuildRequires:	pkgconfig(Qt5XmlPatterns) >= %{version}
-BuildRequires:	pkgconfig(Qt5Declarative) >= %{version}
 BuildRequires:	pkgconfig(Qt5OpenGL) >= %{version}
 #BuildRequires:	pkgconfig(assimp)
 BuildRequires:	qt5-qtqml-private-devel >= %{version}
