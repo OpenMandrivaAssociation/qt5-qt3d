@@ -42,6 +42,7 @@ BuildRequires:	pkgconfig(Qt5OpenGL) >= %{version}
 BuildRequires:	pkgconfig(Qt5Concurrent) >= %{version}
 #BuildRequires:	pkgconfig(assimp)
 BuildRequires:	qt5-qtqml-private-devel >= %{version}
+BuildRequires:	qt5-qtquick-private-devel >= %{version}
 Requires:	%{core} = %{EVRD}
 Requires:	%{collision} = %{EVRD}
 Requires:	%{input} = %{EVRD}
