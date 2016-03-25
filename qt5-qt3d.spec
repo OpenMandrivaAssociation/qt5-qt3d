@@ -17,13 +17,13 @@
 %define rendererd %mklibname qt%{major}3drenderer -d
 
 Name:		qt5-qt3d
-Version:	5.5.1
+Version:	5.6.0
 %if "%{beta}" != ""
 Release:	1.%{beta}.1
 %define qttarballdir qt3d-opensource-src-%{version}-%{beta}
 Source0:	http://download.qt.io/development_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}%{?beta:-%{beta}}/submodules/%{qttarballdir}.tar.xz
 %else
-Release:	2
+Release:	1
 %define qttarballdir qt3d-opensource-src-%{version}
 Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
 %endif
@@ -31,17 +31,17 @@ Summary:	Qt 3D toolkit
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
 URL:		http://www.qt.io/
-BuildRequires:	qt5-qtbase-devel
-BuildRequires:	pkgconfig(Qt5Core)
-BuildRequires:	pkgconfig(Qt5Gui)
-BuildRequires:	pkgconfig(Qt5Quick)
-BuildRequires:	pkgconfig(Qt5Qml)
-BuildRequires:	pkgconfig(Qt5Network)
-BuildRequires:	pkgconfig(Qt5XmlPatterns)
-BuildRequires:	pkgconfig(Qt5Declarative)
-BuildRequires:	pkgconfig(Qt5OpenGL)
+BuildRequires:	qmake5 >= %{version}
+BuildRequires:	pkgconfig(Qt5Core) >= %{version}
+BuildRequires:	pkgconfig(Qt5Gui) >= %{version}
+BuildRequires:	pkgconfig(Qt5Quick) >= %{version}
+BuildRequires:	pkgconfig(Qt5Qml) >= %{version}
+BuildRequires:	pkgconfig(Qt5Network) >= %{version}
+BuildRequires:	pkgconfig(Qt5XmlPatterns) >= %{version}
+BuildRequires:	pkgconfig(Qt5Declarative) >= %{version}
+BuildRequires:	pkgconfig(Qt5OpenGL) >= %{version}
 #BuildRequires:	pkgconfig(assimp)
-BuildRequires:	qt5-qtqml-private-devel
+BuildRequires:	qt5-qtqml-private-devel >= %{version}
 Requires:	%{core} = %{EVRD}
 Requires:	%{collision} = %{EVRD}
 Requires:	%{input} = %{EVRD}
