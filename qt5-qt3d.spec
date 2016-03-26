@@ -11,10 +11,12 @@
 %define logicd %mklibname qt%{major}3dlogic -d
 %define quick %mklibname qt%{major}3dquick %{major}
 %define quickd %mklibname qt%{major}3dquick -d
-%define quickrenderer %mklibname qt%{major}3dquickrenderer %{major}
-%define quickrendererd %mklibname qt%{major}3dquickrenderer -d
-%define renderer %mklibname qt%{major}3drenderer %{major}
-%define rendererd %mklibname qt%{major}3drenderer -d
+%define quickinput %mklibname qt%{major}3dquickinput %{major}
+%define quickinputd %mklibname qt%{major}3dquickinput -d
+%define quickrender %mklibname qt%{major}3dquickrender %{major}
+%define quickrenderd %mklibname qt%{major}3dquickrender -d
+%define render %mklibname qt%{major}3drender %{major}
+%define renderd %mklibname qt%{major}3drender -d
 
 Name:		qt5-qt3d
 Version:	5.6.0
@@ -48,8 +50,8 @@ Requires:	%{collision} = %{EVRD}
 Requires:	%{input} = %{EVRD}
 Requires:	%{logic} = %{EVRD}
 Requires:	%{quick} = %{EVRD}
-Requires:	%{quickrenderer} = %{EVRD}
-Requires:	%{renderer} = %{EVRD}
+Requires:	%{quickrender} = %{EVRD}
+Requires:	%{render} = %{EVRD}
 Requires:       qt5-qtimageformats >= %{version}
 
 %description
@@ -65,8 +67,8 @@ Group:		Development/KDE and Qt
 Requires:	%{cored} = %{EVRD}
 Requires:	%{inputd} = %{EVRD}
 Requires:	%{quickd} = %{EVRD}
-Requires:	%{quickrendererd} = %{EVRD}
-Requires:	%{rendererd} = %{EVRD}
+Requires:	%{quickrenderd} = %{EVRD}
+Requires:	%{renderd} = %{EVRD}
 
 %files devel
 %{_libdir}/qt5/examples/qt3d
@@ -212,60 +214,92 @@ Development files for the Qt3D QtQuick library.
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquick_private.pri
 
 # =====
-%package -n %{quickrenderer}
-Summary:	Qt3D QuickRenderer library
+%package -n %{quickinput}
+Summary:	Qt3D QuickInput library
 Group:		System/Libraries
 
-%description -n %{quickrenderer}
-Qt3D QuickRenderer library.
+%description -n %{quickinput}
+Qt3D QuickInput library.
 
-%files -n %{quickrenderer}
-%{_libdir}/libQt%{major}3DQuickRenderer.so.%{major}*
+%files -n %{quickinput}
+%{_libdir}/libQt%{major}3DQuickInput.so.%{major}*
 
-%package -n %{quickrendererd}
-Summary:	Development files for the Qt3D QuickRenderer library
+%package -n %{quickinputdd}
+Summary:	Development files for the Qt3D QuickInput library
 Group:		Development/KDE and Qt
-Requires:	%{quickrenderer} = %{EVRD}
+Requires:	%{quickinput} = %{EVRD}
 
-%description -n %{quickrendererd}
-Development files for the Qt3D QuickRenderer library.
+%description -n %{quickinputd}
+Development files for the Qt3D QuickInput library.
 
-%files -n %{quickrendererd}
-%{_includedir}/qt%{major}/Qt3DQuickRenderer
-%{_libdir}/cmake/Qt%{major}3DQuickRenderer
-%{_libdir}/libQt%{major}3DQuickRenderer.so
-%{_libdir}/libQt%{major}3DQuickRenderer.prl
-%{_libdir}/pkgconfig/Qt%{major}3DQuickRenderer.pc
-%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickrenderer.pri
-%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickrenderer_private.pri
+%files -n %{quickinputd}
+%{_includedir}/qt%{major}/Qt3DQuickInput
+%{_libdir}/cmake/Qt%{major}3DQuickInput
+%{_libdir}/libQt%{major}3DQuickInput.so
+%{_libdir}/libQt%{major}3DQuickInput.prl
+%{_libdir}/pkgconfig/Qt%{major}3DQuickInput.pc
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickinput.pri
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickinput_private.pri
 
 # =====
-%package -n %{renderer}
-Summary:	Qt3D renderer library
+%package -n %{quickrender}
+Summary:	Qt3D QuickRender library
 Group:		System/Libraries
+Obsoletes:	 %{_lib}qt53dquickrenderer5 < 5.6.0
 
-%description -n %{renderer}
+%description -n %{quickrender}
+Qt3D QuickRenderer library.
+
+%files -n %{quickrender}
+%{_libdir}/libQt%{major}3DQuickRender.so.%{major}*
+
+%package -n %{quickrenderd}
+Summary:	Development files for the Qt3D QuickRender library
+Group:		Development/KDE and Qt
+Requires:	%{quickrender} = %{EVRD}
+Obsoletes:	 %{_lib}qt53dquickrenderer-devel < 5.6.0
+
+%description -n %{quickrenderd}
+Development files for the Qt3D QuickRender library.
+
+%files -n %{quickrenderd}
+%{_includedir}/qt%{major}/Qt3DQuickRender
+%{_libdir}/cmake/Qt%{major}3DQuickRender
+%{_libdir}/libQt%{major}3DQuickRender.so
+%{_libdir}/libQt%{major}3DQuickRender.prl
+%{_libdir}/pkgconfig/Qt%{major}3DQuickRender.pc
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickrender.pri
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickrender_private.pri
+
+# =====
+%package -n %{render}
+Summary:	Qt3D render library
+Group:		System/Libraries
+Obsoletes:	 %{_lib}qt53drender5 < 5.6.0
+
+%description -n %{render}
 Qt3D renderer library.
 
-%files -n %{renderer}
-%{_libdir}/libQt%{major}3DRenderer.so.%{major}*
+%files -n %{render}
+%{_libdir}/libQt%{major}3DRender.so.%{major}*
 
-%package -n %{rendererd}
+%package -n %{renderd}
 Summary:	Development files for the Qt3D renderer library
 Group:		Development/KDE and Qt
-Requires:	%{renderer} = %{EVRD}
+Requires:	%{render} = %{EVRD}
+Obsoletes:	 %{_lib}qt53drender-devel < 5.6.0
 
-%description -n %{rendererd}
+%description -n %{renderd}
 Development files for the Qt3D renderer library.
 
-%files -n %{rendererd}
-%{_includedir}/qt%{major}/Qt3DRenderer
-%{_libdir}/cmake/Qt%{major}3DRenderer
-%{_libdir}/libQt%{major}3DRenderer.so
-%{_libdir}/libQt%{major}3DRenderer.prl
-%{_libdir}/pkgconfig/Qt%{major}3DRenderer.pc
-%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3drenderer.pri
-%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3drenderer_private.pri
+%files -n %{renderd}
+%{_includedir}/qt%{major}/Qt3DRender
+%{_libdir}/cmake/Qt%{major}3DRender
+%{_libdir}/libQt%{major}3DRender.so
+%{_libdir}/libQt%{major}3DRender.prl
+%{_libdir}/pkgconfig/Qt%{major}3DRender.pc
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3drender.pri
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3drender_private.pri
 
 #------------------------------------------------------------------------------
 
