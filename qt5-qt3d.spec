@@ -282,7 +282,7 @@ Development files for the Qt3D renderer library.
 
 %build
 %qmake_qt5
-%make
+%make -j1
 
 #------------------------------------------------------------------------------
 
