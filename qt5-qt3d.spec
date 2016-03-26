@@ -29,6 +29,7 @@ Release:	1
 %define qttarballdir qt3d-opensource-src-%{version}
 Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
 %endif
+Patch0:		0001-Fix-narrowing-errors-found-with-clang.patch
 Summary:	Qt 3D toolkit
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
@@ -305,6 +306,7 @@ Development files for the Qt3D renderer library.
 
 %prep
 %setup -q -n %qttarballdir
+%apply_patches
 
 %build
 %qmake_qt5

@@ -1,0 +1,29 @@
+diff --git a/src/3rdparty/assimp/code/BlenderDNA.cpp b/src/3rdparty/assimp/code/BlenderDNA.cpp
+index b380fbe..283cd7e 100644
+--- a/src/3rdparty/assimp/code/BlenderDNA.cpp
++++ b/src/3rdparty/assimp/code/BlenderDNA.cpp
+@@ -55,7 +55,7 @@ using namespace Assimp::Formatter;
+ 
+ #define for_each BOOST_FOREACH
+ bool match4(StreamReaderAny& stream, const char* string) {
+-	char tmp[] = { 
++	int8_t tmp[] = {
+ 		(stream).GetI1(), 
+ 		(stream).GetI1(),  
+ 		(stream).GetI1(), 
+@@ -343,13 +343,13 @@ void SectionParser :: Next()
+ {
+ 	stream.SetCurrentPos(current.start + current.size);
+ 
+-	const char tmp[] = {
++	const int8_t tmp[] = {
+ 		stream.GetI1(),
+ 		stream.GetI1(),
+ 		stream.GetI1(),
+ 		stream.GetI1()
+ 	};
+-	current.id = std::string(tmp,tmp[3]?4:tmp[2]?3:tmp[1]?2:1);
++	current.id = std::string((char*)tmp,tmp[3]?4:tmp[2]?3:tmp[1]?2:1);
+ 
+ 	current.size = stream.GetI4();
+ 	current.address.val = ptr64 ? stream.GetU8() : stream.GetU4();
