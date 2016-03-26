@@ -224,7 +224,7 @@ Qt3D QuickInput library.
 %files -n %{quickinput}
 %{_libdir}/libQt%{major}3DQuickInput.so.%{major}*
 
-%package -n %{quickinputdd}
+%package -n %{quickinputd}
 Summary:	Development files for the Qt3D QuickInput library
 Group:		Development/KDE and Qt
 Requires:	%{quickinput} = %{EVRD}
