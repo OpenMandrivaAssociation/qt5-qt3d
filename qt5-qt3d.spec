@@ -1,8 +1,6 @@
 %define beta %nil
 %define major %(echo %{version}|cut -d. -f1)
 
-%define collision %mklibname qt%{major}3dcollision %{major}
-%define collisiond %mklibname qt%{major}3dcollision -d
 %define core %mklibname qt%{major}3dcore %{major}
 %define cored %mklibname qt%{major}3dcore -d
 %define input %mklibname qt%{major}3dinput %{major}
@@ -46,19 +44,21 @@ BuildRequires:	pkgconfig(Qt5Concurrent) >= %{version}
 BuildRequires:	qt5-qtqml-private-devel >= %{version}
 BuildRequires:	qt5-qtquick-private-devel >= %{version}
 Requires:	%{core} = %{EVRD}
-Requires:	%{collision} = %{EVRD}
 Requires:	%{input} = %{EVRD}
 Requires:	%{logic} = %{EVRD}
 Requires:	%{quick} = %{EVRD}
 Requires:	%{quickrender} = %{EVRD}
 Requires:	%{render} = %{EVRD}
 Requires:       qt5-qtimageformats >= %{version}
+Obsoletes:	%{mklibname qt53dcollision 5} < 5.6.0
+Obsoletes:	%{mklibname qt53dcollision -d} < 5.6.0
 
 %description
 Qt5 3D API.
 
 %files
 %{_libdir}/qt5/plugins/sceneparsers/libgltfsceneparser.so
+%{_libdir}/qt5/plugins/sceneparsers/libassimpsceneparser.so
 
 # ===
 %package devel
@@ -72,6 +72,7 @@ Requires:	%{renderd} = %{EVRD}
 
 %files devel
 %{_libdir}/qt5/examples/qt3d
+%{_libdir}/qt5/bin/qgltf
 
 # =====
 %package -n %{core}
@@ -101,33 +102,6 @@ Development files for the Qt3D core library.
 %{_libdir}/pkgconfig/Qt%{major}3DCore.pc
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dcore.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dcore_private.pri
-
-%package -n %{collision}
-Summary:	Qt3D collision library
-Group:		System/Libraries
-
-%description -n %{collision}
-Qt3D collision library.
-
-%files -n %{collision}
-%{_libdir}/libQt%{major}3DCollision.so.%{major}*
-
-%package -n %{collisiond}
-Summary:	Development files for the Qt3D collision library
-Group:		Development/KDE and Qt
-Requires:	%{collision} = %{EVRD}
-
-%description -n %{collisiond}
-Development files for the Qt3D collision library.
-
-%files -n %{collisiond}
-%{_includedir}/qt%{major}/Qt3DCollision
-%{_libdir}/cmake/Qt%{major}3DCollision
-%{_libdir}/libQt%{major}3DCollision.so
-%{_libdir}/libQt%{major}3DCollision.prl
-%{_libdir}/pkgconfig/Qt%{major}3DCollision.pc
-%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dcollision.pri
-%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dcollision_private.pri
 
 # =====
 %package -n %{input}
