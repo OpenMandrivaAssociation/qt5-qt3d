@@ -1,7 +1,4 @@
 %define beta %nil
-# disable lto due bug
-# https://bugreports.qt.io/browse/QTBUG-41301
-%define _disable_lto %nil
 %define major %(echo %{version}|cut -d. -f1)
 
 %define core %mklibname qt%{major}3dcore %{major}
@@ -75,7 +72,9 @@ Requires:	%{quickrenderd} = %{EVRD}
 Requires:	%{renderd} = %{EVRD}
 
 %files devel
-%{_libdir}/qt5/examples/qt3d
+# disable examples due bug
+# https://bugreports.qt.io/browse/QTBUG-41301
+#% {_libdir}/qt5/examples/qt3d
 %{_libdir}/qt5/bin/qgltf
 
 # =====
@@ -284,10 +283,13 @@ Development files for the Qt3D renderer library.
 %prep
 %setup -q -n %qttarballdir
 %apply_patches
+# disable examples due bug
+# https://bugreports.qt.io/browse/QTBUG-41301
+rm -rf examples/
 
 %build
 %qmake_qt5
-%make -j1
+%make
 
 #------------------------------------------------------------------------------
 
