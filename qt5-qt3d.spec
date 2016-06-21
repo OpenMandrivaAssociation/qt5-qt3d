@@ -15,9 +15,11 @@
 %define quickrenderd %mklibname qt%{major}3dquickrender -d
 %define render %mklibname qt%{major}3drender %{major}
 %define renderd %mklibname qt%{major}3drender -d
+%define extrasd %mklibname qt%{major}3dextras -d
+%define quickextrasd %mklibname qt%{major}3dquickextras -d
 
 Name:		qt5-qt3d
-Version:	5.6.1
+Version:	5.7.0
 %if "%{beta}" != ""
 Release:	1.%{beta}.1
 %define qttarballdir qt3d-opensource-src-%{version}-%{beta}
@@ -58,8 +60,7 @@ Obsoletes:	%{mklibname qt53dcollision -d} < 5.6.0
 Qt5 3D API.
 
 %files
-%{_libdir}/qt5/plugins/sceneparsers/libgltfsceneparser.so
-%{_libdir}/qt5/plugins/sceneparsers/libassimpsceneparser.so
+%{_libdir}/qt5/plugins/sceneparsers
 
 # ===
 %package devel
@@ -277,6 +278,46 @@ Development files for the Qt3D renderer library.
 %{_libdir}/pkgconfig/Qt%{major}3DRender.pc
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3drender.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3drender_private.pri
+
+
+%libpackage Qt53DExtras 5
+
+%libpackage Qt53DQuickExtras 5
+
+
+%package -n %{extrasd}
+Summary:	Development files for the Qt3DExtras library
+Group:		Development/KDE and Qt
+Requires:	%{mklibname Qt53DExtras 5} = %{EVRD}
+
+%description -n %{extrasd}
+Development files for the Qt3DExtras library.
+
+%files -n %{extrasd}
+%{_includedir}/qt%{major}/Qt3DExtras
+%{_libdir}/libQt53DExtras.so
+%{_libdir}/libQt53DExtras.prl
+%{_libdir}/pkgconfig/Qt53DExtras.pc
+%{_libdir}/qt5/mkspecs/modules/qt_lib_3dextras.pri
+%{_libdir}/qt5/mkspecs/modules/qt_lib_3dextras_private.pri
+%{_libdir}/cmake/Qt53DExtras
+
+%package -n %{quickextrasd}
+Summary:	Development files for the Qt3DQuickExtras library
+Group:		Development/KDE and Qt
+Requires:	%{mklibname Qt53DQuickExtras 5} = %{EVRD}
+
+%description -n %{quickextrasd}
+Development files for the Qt3DQuickExtras library.
+
+%files -n %{quickextrasd}
+%{_includedir}/qt%{major}/Qt3DQuickExtras
+%{_libdir}/libQt53DQuickExtras.so
+%{_libdir}/libQt53DQuickExtras.prl
+%{_libdir}/pkgconfig/Qt53DQuickExtras.pc
+%{_libdir}/qt5/mkspecs/modules/qt_lib_3dquickextras.pri
+%{_libdir}/qt5/mkspecs/modules/qt_lib_3dquickextras_private.pri
+%{_libdir}/cmake/Qt53DQuickExtras
 
 #------------------------------------------------------------------------------
 
