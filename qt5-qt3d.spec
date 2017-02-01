@@ -1,4 +1,4 @@
-%define beta beta
+%define beta %{nil}
 %define major %(echo %{version}|cut -d. -f1)
 
 %define core %mklibname qt%{major}3dcore %{major}
