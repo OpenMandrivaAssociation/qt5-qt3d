@@ -1,25 +1,31 @@
-%define beta %{nil}
+%define beta beta
 %define major %(echo %{version}|cut -d. -f1)
 
 %define core %mklibname qt%{major}3dcore %{major}
 %define cored %mklibname qt%{major}3dcore -d
+%define animation %mklibname qt%{major}3danimation %{major}
+%define animationd %mklibname qt%{major}3danimation -d
 %define input %mklibname qt%{major}3dinput %{major}
 %define inputd %mklibname qt%{major}3dinput -d
 %define logic %mklibname qt%{major}3dlogic %{major}
 %define logicd %mklibname qt%{major}3dlogic -d
 %define quick %mklibname qt%{major}3dquick %{major}
 %define quickd %mklibname qt%{major}3dquick -d
+%define quickanimation %mklibname qt%{major}3dquickanimation %{major}
+%define quickanimationd %mklibname qt%{major}3dquickanimation -d
 %define quickinput %mklibname qt%{major}3dquickinput %{major}
 %define quickinputd %mklibname qt%{major}3dquickinput -d
 %define quickrender %mklibname qt%{major}3dquickrender %{major}
 %define quickrenderd %mklibname qt%{major}3dquickrender -d
+%define quickscene2d %mklibname qt%{major}3dquickscene2d %{major}
+%define quickscene2dd %mklibname qt%{major}3dquickscene2d -d
 %define render %mklibname qt%{major}3drender %{major}
 %define renderd %mklibname qt%{major}3drender -d
 %define extrasd %mklibname qt%{major}3dextras -d
 %define quickextrasd %mklibname qt%{major}3dquickextras -d
 
 Name:		qt5-qt3d
-Version:	5.8.0
+Version:	5.9.0
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 %define qttarballdir qt3d-opensource-src-%{version}-%{beta}
@@ -29,7 +35,6 @@ Release:	1
 %define qttarballdir qt3d-opensource-src-%{version}
 Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
 %endif
-Patch0:		0001-Fix-narrowing-errors-found-with-clang.patch
 Summary:	Qt 3D toolkit
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
@@ -47,10 +52,12 @@ BuildRequires:	pkgconfig(Qt5Concurrent) >= %{version}
 BuildRequires:	qt5-qtqml-private-devel >= %{version}
 BuildRequires:	qt5-qtquick-private-devel >= %{version}
 Requires:	%{core} = %{EVRD}
+Requires:	%{animation} = %{EVRD}
 Requires:	%{input} = %{EVRD}
 Requires:	%{logic} = %{EVRD}
 Requires:	%{quick} = %{EVRD}
 Requires:	%{quickrender} = %{EVRD}
+Requires:	%{quickscene2d} = %{EVRD}
 Requires:	%{render} = %{EVRD}
 Requires:       qt5-qtimageformats >= %{version}
 Obsoletes:	%{mklibname qt53dcollision 5} < 5.6.0
@@ -67,9 +74,11 @@ Qt5 3D API.
 Summary:	Development files for the Qt 3D library
 Group:		Development/KDE and Qt
 Requires:	%{cored} = %{EVRD}
+Requires:	%{animationd} = %{EVRD}
 Requires:	%{inputd} = %{EVRD}
 Requires:	%{quickd} = %{EVRD}
 Requires:	%{quickrenderd} = %{EVRD}
+Requires:	%{quickscene2dd} = %{EVRD}
 Requires:	%{renderd} = %{EVRD}
 
 %files devel
@@ -89,6 +98,9 @@ Qt3D core library.
 
 %files -n %{core}
 %{_libdir}/libQt%{major}3DCore.so.%{major}*
+%dir %{_libdir}/qt5/plugins/geometryloaders
+%{_libdir}/qt5/plugins/geometryloaders/libdefaultgeometryloader.so
+%{_libdir}/qt5/plugins/geometryloaders/libgltfgeometryloader.so
 
 %package -n %{cored}
 Summary:	Development files for the Qt3D core library
@@ -106,6 +118,34 @@ Development files for the Qt3D core library.
 %{_libdir}/pkgconfig/Qt%{major}3DCore.pc
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dcore.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dcore_private.pri
+
+# =====
+%package -n %{animation}
+Summary:	Qt3D animation library
+Group:		System/Libraries
+
+%description -n %{animation}
+Qt3D animation library.
+
+%files -n %{animation}
+%{_libdir}/libQt%{major}3DAnimation.so.%{major}*
+
+%package -n %{animationd}
+Summary:	Development files for the Qt3D animation library
+Group:		Development/KDE and Qt
+Requires:	%{animation} = %{EVRD}
+
+%description -n %{animationd}
+Development files for the Qt3D animation library.
+
+%files -n %{animationd}
+%{_includedir}/qt%{major}/Qt3DAnimation
+%{_libdir}/cmake/Qt%{major}3DAnimation
+%{_libdir}/libQt%{major}3DAnimation.so
+%{_libdir}/libQt%{major}3DAnimation.prl
+%{_libdir}/pkgconfig/Qt%{major}3DAnimation.pc
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3danimation.pri
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3danimation_private.pri
 
 # =====
 %package -n %{input}
@@ -192,6 +232,34 @@ Development files for the Qt3D QtQuick library.
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquick_private.pri
 
 # =====
+%package -n %{quickanimation}
+Summary:	Qt3D Quick Animation library
+Group:		System/Libraries
+
+%description -n %{quickanimation}
+Qt3D Quick Animation library.
+
+%files -n %{quickanimation}
+%{_libdir}/libQt%{major}3DQuickAnimation.so.%{major}*
+
+%package -n %{quickanimationd}
+Summary:	Development files for the Qt3D Quick Animation library
+Group:		Development/KDE and Qt
+Requires:	%{quickanimation} = %{EVRD}
+
+%description -n %{quickanimationd}
+Development files for the Qt3D Quick Animation library.
+
+%files -n %{quickanimationd}
+%{_includedir}/qt%{major}/Qt3DQuickAnimation
+%{_libdir}/cmake/Qt%{major}3DQuickAnimation
+%{_libdir}/libQt%{major}3DQuickAnimation.so
+%{_libdir}/libQt%{major}3DQuickAnimation.prl
+%{_libdir}/pkgconfig/Qt%{major}3DQuickAnimation.pc
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickanimation.pri
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickanimation_private.pri
+
+# =====
 %package -n %{quickinput}
 Summary:	Qt3D QuickInput library
 Group:		System/Libraries
@@ -248,6 +316,36 @@ Development files for the Qt3D QuickRender library.
 %{_libdir}/pkgconfig/Qt%{major}3DQuickRender.pc
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickrender.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickrender_private.pri
+
+# =====
+%package -n %{quickscene2d}
+Summary:	Qt3D Quick 2D Scene library
+Group:		System/Libraries
+
+%description -n %{quickscene2d}
+Qt3D Quick 2D Scene library.
+
+%files -n %{quickscene2d}
+%{_libdir}/libQt%{major}3DQuickScene2D.so.%{major}*
+%{_libdir}/qt5/qml/QtQuick/Scene2D
+%{_libdir}/qt5/plugins/renderplugins/libscene2d.so
+
+%package -n %{quickscene2dd}
+Summary:	Development files for the Qt3D Quick 2D Scene library
+Group:		Development/KDE and Qt
+Requires:	%{quickscene2d} = %{EVRD}
+
+%description -n %{quickscene2dd}
+Development files for the Qt3D Quick 2D Scene library.
+
+%files -n %{quickscene2dd}
+%{_includedir}/qt%{major}/Qt3DQuickScene2D
+%{_libdir}/cmake/Qt%{major}3DQuickScene2D
+%{_libdir}/libQt%{major}3DQuickScene2D.so
+%{_libdir}/libQt%{major}3DQuickScene2D.prl
+%{_libdir}/pkgconfig/Qt%{major}3DQuickScene2D.pc
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickscene2d.pri
+%{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickscene2d_private.pri
 
 # =====
 %package -n %{render}
