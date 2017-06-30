@@ -25,7 +25,7 @@
 %define quickextrasd %mklibname qt%{major}3dquickextras -d
 
 Name:		qt5-qt3d
-Version:	5.9.0
+Version:	5.9.1
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 %define qttarballdir qt3d-opensource-src-%{version}-%{beta}
