@@ -1,4 +1,4 @@
-%define beta %{nil}
+%define beta beta3
 %define major %(echo %{version}|cut -d. -f1)
 
 %define core %mklibname qt%{major}3dcore %{major}
@@ -25,7 +25,7 @@
 %define quickextrasd %mklibname qt%{major}3dquickextras -d
 
 Name:		qt5-qt3d
-Version:	5.10.1
+Version:	5.11.0
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 %define qttarballdir qt3d-everywhere-src-%{version}-%{beta}
@@ -81,6 +81,9 @@ Requires:	%{quickd} = %{EVRD}
 Requires:	%{quickrenderd} = %{EVRD}
 Requires:	%{quickscene2dd} = %{EVRD}
 Requires:	%{renderd} = %{EVRD}
+
+%description devel
+Development files for the Qt 3D library
 
 %files devel
 # disable examples due bug
