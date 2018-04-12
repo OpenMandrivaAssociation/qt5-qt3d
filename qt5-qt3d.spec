@@ -63,6 +63,8 @@ Requires:	%{render} = %{EVRD}
 Requires:       qt5-qtimageformats >= %{version}
 Obsoletes:	%{mklibname qt53dcollision 5} < 5.6.0
 Obsoletes:	%{mklibname qt53dcollision -d} < 5.6.0
+# For the Provides: generator
+BuildRequires:	cmake >= 3.11.0-1
 
 %description
 Qt5 3D API.
