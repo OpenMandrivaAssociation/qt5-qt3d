@@ -1,4 +1,4 @@
-%define beta beta3
+%define beta beta4
 %define major %(echo %{version}|cut -d. -f1)
 
 %define core %mklibname qt%{major}3dcore %{major}
@@ -35,7 +35,6 @@ Release:	1
 %define qttarballdir qt3d-everywhere-src-%{version}
 Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
 %endif
-Patch0:		qt3d-5.9-compile.patch
 Summary:	Qt 3D toolkit
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
