@@ -85,7 +85,7 @@ Requires:	%{quickscene2dd} = %{EVRD}
 Requires:	%{renderd} = %{EVRD}
 
 %description devel
-Development files for the Qt 3D library
+Development files for the Qt 3D library.
 
 %files devel
 # disable examples due bug
@@ -297,7 +297,7 @@ Development files for the Qt3D QuickInput library.
 %package -n %{quickrender}
 Summary:	Qt3D QuickRender library
 Group:		System/Libraries
-Obsoletes:	 %{_lib}qt53dquickrenderer5 < 5.6.0
+Obsoletes:	%{_lib}qt53dquickrenderer5 < 5.6.0
 
 %description -n %{quickrender}
 Qt3D QuickRenderer library.
@@ -309,7 +309,7 @@ Qt3D QuickRenderer library.
 Summary:	Development files for the Qt3D QuickRender library
 Group:		Development/KDE and Qt
 Requires:	%{quickrender} = %{EVRD}
-Obsoletes:	 %{_lib}qt53dquickrenderer-devel < 5.6.0
+Obsoletes:	%{_lib}qt53dquickrenderer-devel < 5.6.0
 
 %description -n %{quickrenderd}
 Development files for the Qt3D QuickRender library.
@@ -357,7 +357,7 @@ Development files for the Qt3D Quick 2D Scene library.
 %package -n %{render}
 Summary:	Qt3D render library
 Group:		System/Libraries
-Obsoletes:	 %{_lib}qt53drender5 < 5.6.0
+Obsoletes:	%{_lib}qt53drender5 < 5.6.0
 
 %description -n %{render}
 Qt3D renderer library.
@@ -369,7 +369,7 @@ Qt3D renderer library.
 Summary:	Development files for the Qt3D renderer library
 Group:		Development/KDE and Qt
 Requires:	%{render} = %{EVRD}
-Obsoletes:	 %{_lib}qt53drender-devel < 5.6.0
+Obsoletes:	%{_lib}qt53drender-devel < 5.6.0
 
 %description -n %{renderd}
 Development files for the Qt3D renderer library.
@@ -426,20 +426,19 @@ Development files for the Qt3DQuickExtras library.
 #------------------------------------------------------------------------------
 
 %prep
-%setup -q -n %qttarballdir
-%apply_patches
+%autosetup -n %qttarballdir -p1
 # disable examples due bug
 # https://bugreports.qt.io/browse/QTBUG-41301
 rm -rf examples/
 
 %build
 %qmake_qt5
-%make
+%make_build
 
 #------------------------------------------------------------------------------
 
 %install
-%makeinstall_std INSTALL_ROOT=%{buildroot}
+%make_install INSTALL_ROOT=%{buildroot}
 
 ## .prl/.la file love
 # nuke .prl reference(s) to %%buildroot, excessive (.la-like) libs
