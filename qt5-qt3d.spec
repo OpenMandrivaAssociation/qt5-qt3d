@@ -1,4 +1,4 @@
-%define beta %{nil}
+%define beta rc3
 %define major %(echo %{version}|cut -d. -f1)
 
 %define core %mklibname qt%{major}3dcore %{major}
@@ -25,7 +25,7 @@
 %define quickextrasd %mklibname qt%{major}3dquickextras -d
 
 Name:		qt5-qt3d
-Version:	5.12.3
+Version:	5.13.0
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 %define qttarballdir qt3d-everywhere-src-%{version}-%{beta}
