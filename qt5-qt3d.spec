@@ -52,6 +52,7 @@ BuildRequires:	pkgconfig(zlib)
 #BuildRequires:	pkgconfig(assimp)
 BuildRequires:	qt5-qtqml-private-devel >= %{version}
 BuildRequires:	qt5-qtquick-private-devel >= %{version}
+BuildRequires:	qt5-qtqmlmodels-private-devel >= %{version}
 Requires:	%{core} = %{EVRD}
 Requires:	%{animation} = %{EVRD}
 Requires:	%{input} = %{EVRD}
