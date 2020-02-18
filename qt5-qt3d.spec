@@ -1,4 +1,4 @@
-%define beta %{nil}
+%define beta alpha
 %define major %(echo %{version}|cut -d. -f1)
 
 %define core %mklibname qt%{major}3dcore %{major}
@@ -25,13 +25,13 @@
 %define quickextrasd %mklibname qt%{major}3dquickextras -d
 
 Name:		qt5-qt3d
-Version:	5.14.1
+Version:	5.15.0
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 %define qttarballdir qt3d-everywhere-src-%{version}-%{beta}
 Source0:	http://download.qt.io/development_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}%{?beta:-%{beta}}/submodules/%{qttarballdir}.tar.xz
 %else
-Release:	2
+Release:	1
 %define qttarballdir qt3d-everywhere-src-%{version}
 Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
 %endif
@@ -366,6 +366,7 @@ Qt3D renderer library.
 
 %files -n %{render}
 %{_libdir}/libQt%{major}3DRender.so.%{major}*
+%{_libdir}/qt5/plugins/renderers
 
 %package -n %{renderd}
 Summary:	Development files for the Qt3D renderer library
