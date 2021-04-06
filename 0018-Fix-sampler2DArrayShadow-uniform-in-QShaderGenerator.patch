@@ -1,0 +1,44 @@
+From 077b1281ca376a39a5815b112e8e067cdc9165f4 Mon Sep 17 00:00:00 2001
+From: Jim Albamont <jim.albamont@kdab.com>
+Date: Thu, 10 Dec 2020 11:41:44 -0800
+Subject: [PATCH 18/19] Fix sampler2DArrayShadow uniform in QShaderGenerator
+
+Also update the test
+
+Change-Id: I23d897f40747192687e632d21aa8fe2f57645909
+Pick-to: 6.0
+Reviewed-by: Paul Lemire <paul.lemire@kdab.com>
+---
+ src/render/shadergraph/qshadergenerator.cpp                     | 2 +-
+ .../shadergraph/qshadergenerator/tst_qshadergenerator.cpp       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/render/shadergraph/qshadergenerator.cpp b/src/render/shadergraph/qshadergenerator.cpp
+index a33110719..5ab603de0 100644
+--- a/src/render/shadergraph/qshadergenerator.cpp
++++ b/src/render/shadergraph/qshadergenerator.cpp
+@@ -213,7 +213,7 @@ namespace
+         case QShaderLanguage::Sampler1DArrayShadow:
+             return "sampler1DArrayShadow";
+         case QShaderLanguage::Sampler2DArrayShadow:
+-            return "sample2DArrayShadow";
++            return "sampler2DArrayShadow";
+         case QShaderLanguage::SamplerCubeShadow:
+             return "samplerCubeShadow";
+         case QShaderLanguage::SamplerCubeArrayShadow:
+diff --git a/tests/auto/render/shadergraph/qshadergenerator/tst_qshadergenerator.cpp b/tests/auto/render/shadergraph/qshadergenerator/tst_qshadergenerator.cpp
+index 98f571328..c34cdb69f 100644
+--- a/tests/auto/render/shadergraph/qshadergenerator/tst_qshadergenerator.cpp
++++ b/tests/auto/render/shadergraph/qshadergenerator/tst_qshadergenerator.cpp
+@@ -516,7 +516,7 @@ namespace {
+         case QShaderLanguage::Sampler1DArrayShadow:
+             return "sampler1DArrayShadow";
+         case QShaderLanguage::Sampler2DArrayShadow:
+-            return "sample2DArrayShadow";
++            return "sampler2DArrayShadow";
+         case QShaderLanguage::SamplerCubeShadow:
+             return "samplerCubeShadow";
+         case QShaderLanguage::SamplerCubeArrayShadow:
+-- 
+2.31.1
+

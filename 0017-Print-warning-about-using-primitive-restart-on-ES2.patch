@@ -1,0 +1,32 @@
+From d9847c969a999b8c614cc937a2239fbfc2567bca Mon Sep 17 00:00:00 2001
+From: Mike Krus <mike.krus@kdab.com>
+Date: Tue, 15 Dec 2020 17:22:56 +0000
+Subject: [PATCH 17/19] Print warning about using primitive restart on ES2
+
+Change-Id: I6007f1e152e38948b619cdeada84a86f7f4db4e4
+Reviewed-by: Paul Lemire <paul.lemire@kdab.com>
+(cherry picked from commit 492c976b05256b29aac0df861c4be77e1eb65906)
+Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+---
+ .../renderers/opengl/graphicshelpers/graphicshelperes2.cpp   | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/plugins/renderers/opengl/graphicshelpers/graphicshelperes2.cpp b/src/plugins/renderers/opengl/graphicshelpers/graphicshelperes2.cpp
+index f485fc57b..8b9832a42 100644
+--- a/src/plugins/renderers/opengl/graphicshelpers/graphicshelperes2.cpp
++++ b/src/plugins/renderers/opengl/graphicshelpers/graphicshelperes2.cpp
+@@ -709,6 +709,11 @@ void GraphicsHelperES2::memoryBarrier(QMemoryBarrier::Operations barriers)
+ 
+ void GraphicsHelperES2::enablePrimitiveRestart(int)
+ {
++    static bool showWarning = true;
++    if (!showWarning)
++        return;
++    showWarning = false;
++    qWarning() << "primitive restart is not supported by OpenGL ES 2.0 (since GL 3.1, ES 3.0)";
+ }
+ 
+ void GraphicsHelperES2::enableVertexAttributeArray(int location)
+-- 
+2.31.1
+

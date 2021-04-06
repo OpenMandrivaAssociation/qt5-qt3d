@@ -1,0 +1,192 @@
+From db1a22f00c85aa2d2dde3a19a3611f98e2f0da5f Mon Sep 17 00:00:00 2001
+From: Paul Lemire <paul.lemire@kdab.com>
+Date: Tue, 3 Nov 2020 11:23:35 +0100
+Subject: [PATCH 06/19] Fix GLTexture cleanup
+
+The GLTexture class wasn't registered for cleanup on the manager.
+This could result in it being reuse while not being reinitialized resulting
+in incorrect rendering.
+
+Change-Id: I85e6a5c3b5ca9d3cfa5ac5bcb1db3695dabfa576
+Reviewed-by: Mike Krus <mike.krus@kdab.com>
+(cherry picked from commit dbf5da312ae3f406cc45a80c6ab2464b6e2d1e14)
+---
+ .../opengl/managers/glresourcemanagers_p.h    |   1 +
+ .../gltexturemanager/gltexturemanager.pro     |  15 +++
+ .../gltexturemanager/tst_gltexturemanager.cpp | 115 ++++++++++++++++++
+ tests/auto/render/opengl/opengl.pro           |   3 +-
+ 4 files changed, 133 insertions(+), 1 deletion(-)
+ create mode 100644 tests/auto/render/opengl/gltexturemanager/gltexturemanager.pro
+ create mode 100644 tests/auto/render/opengl/gltexturemanager/tst_gltexturemanager.cpp
+
+diff --git a/src/plugins/renderers/opengl/managers/glresourcemanagers_p.h b/src/plugins/renderers/opengl/managers/glresourcemanagers_p.h
+index 9472bc33f..f6dc3e2d1 100644
+--- a/src/plugins/renderers/opengl/managers/glresourcemanagers_p.h
++++ b/src/plugins/renderers/opengl/managers/glresourcemanagers_p.h
+@@ -133,6 +133,7 @@ private:
+ } // Qt3DRender
+ 
+ Q_DECLARE_RESOURCE_INFO(Qt3DRender::Render::OpenGL::OpenGLVertexArrayObject, Q_REQUIRES_CLEANUP)
++Q_DECLARE_RESOURCE_INFO(Qt3DRender::Render::OpenGL::GLTexture, Q_REQUIRES_CLEANUP)
+ 
+ QT_END_NAMESPACE
+ 
+diff --git a/tests/auto/render/opengl/gltexturemanager/gltexturemanager.pro b/tests/auto/render/opengl/gltexturemanager/gltexturemanager.pro
+new file mode 100644
+index 000000000..7784d8da7
+--- /dev/null
++++ b/tests/auto/render/opengl/gltexturemanager/gltexturemanager.pro
+@@ -0,0 +1,15 @@
++TEMPLATE = app
++
++TARGET = tst_gltexturemanager
++
++QT += core-private 3dcore 3dcore-private 3drender 3drender-private testlib
++
++CONFIG += testcase
++
++SOURCES += tst_gltexturemanager.cpp
++
++include(../../../core/common/common.pri)
++include(../../commons/commons.pri)
++
++# Link Against OpenGL Renderer Plugin
++include(../opengl_render_plugin.pri)
+diff --git a/tests/auto/render/opengl/gltexturemanager/tst_gltexturemanager.cpp b/tests/auto/render/opengl/gltexturemanager/tst_gltexturemanager.cpp
+new file mode 100644
+index 000000000..281c903e3
+--- /dev/null
++++ b/tests/auto/render/opengl/gltexturemanager/tst_gltexturemanager.cpp
+@@ -0,0 +1,115 @@
++/****************************************************************************
++**
++** Copyright (C) 2020 Klaralvdalens Datakonsult AB (KDAB).
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the Qt3D module of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include <QtTest/QTest>
++#include <Qt3DRender/QTextureImageDataGenerator>
++#include <glresourcemanagers_p.h>
++#include <glresourcemanagers_p.h>
++#include <gltexture_p.h>
++#include <Qt3DCore/qnodeid.h>
++#include "qbackendnodetester.h"
++#include "testrenderer.h"
++
++class TestImageDataGenerator : public Qt3DRender::QTextureImageDataGenerator
++{
++    int m_id;
++public:
++    TestImageDataGenerator(int id) : m_id(id) {}
++
++    Qt3DRender::QTextureImageDataPtr operator ()() override {
++        return Qt3DRender::QTextureImageDataPtr::create();
++    }
++
++    bool operator ==(const Qt3DRender::QTextureImageDataGenerator &other) const override {
++        const TestImageDataGenerator *otherFunctor = Qt3DRender::functor_cast<TestImageDataGenerator>(&other);
++        return (otherFunctor != nullptr && otherFunctor->m_id == m_id);
++    }
++
++    QT3D_FUNCTOR(TestImageDataGenerator)
++};
++
++using ImageDataGeneratorPtr = QSharedPointer<TestImageDataGenerator>;
++
++class tst_GLTextureManager : public Qt3DCore::QBackendNodeTester
++{
++    Q_OBJECT
++
++private Q_SLOTS:
++    void checkInitialState()
++    {
++        // GIVEN
++        Qt3DRender::Render::OpenGL::GLTextureManager manager;
++        const Qt3DCore::QNodeId id = Qt3DCore::QNodeId::createId();
++        Qt3DRender::Render::OpenGL::GLTexture *t = manager.getOrCreateResource(id);
++
++        // THEN
++        QVERIFY(t != nullptr);
++        QVERIFY(!t->isDirty());
++        QVERIFY(!t->hasTextureData());
++        QVERIFY(!t->hasImagesData());
++        QVERIFY(t->dataGenerator().isNull());
++        QVERIFY(t->textureDataUpdates().empty());
++        QCOMPARE(t->dirtyFlags(),  Qt3DRender::Render::OpenGL::GLTexture::None);
++        QVERIFY(t->images().empty());
++
++        QCOMPARE(t, manager.getOrCreateResource(id));
++    }
++
++    void checkCleanup()
++    {
++        // GIVEN
++        Qt3DRender::Render::OpenGL::GLTextureManager manager;
++        const Qt3DCore::QNodeId id = Qt3DCore::QNodeId::createId();
++        Qt3DRender::Render::OpenGL::GLTexture *t = manager.getOrCreateResource(id);
++
++        // WHEN
++        Qt3DRender::Render::OpenGL::GLTexture::Image img = {
++            ImageDataGeneratorPtr::create(0),
++            0, 0,
++            Qt3DRender::QAbstractTexture::AllFaces
++        };
++        t->setImages({img});
++
++        // THEN
++        QCOMPARE(t->images().size(), 1);
++        QCOMPARE(t->dirtyFlags(),  Qt3DRender::Render::OpenGL::GLTexture::TextureImageData);
++
++        // WHEN
++        manager.releaseResource(id);
++
++        // THEN -> Cleanup should have been called
++        Qt3DRender::Render::OpenGL::GLTexture *t2 = manager.getOrCreateResource(id);
++        QCOMPARE(t, t2);
++        QVERIFY(t->images().empty());
++        QCOMPARE(t->dirtyFlags(),  Qt3DRender::Render::OpenGL::GLTexture::None);
++    }
++};
++
++QTEST_APPLESS_MAIN(tst_GLTextureManager)
++
++#include "tst_gltexturemanager.moc"
+diff --git a/tests/auto/render/opengl/opengl.pro b/tests/auto/render/opengl/opengl.pro
+index fead9b5ff..2e99a970d 100644
+--- a/tests/auto/render/opengl/opengl.pro
++++ b/tests/auto/render/opengl/opengl.pro
+@@ -13,7 +13,8 @@ SUBDIRS += \
+         renderqueue \
+         renderviewbuilder \
+         qgraphicsutils \
+-        computecommand
++        computecommand \
++        gltexturemanager
+ 
+ qtHaveModule(quick) {
+     SUBDIRS += \
+-- 
+2.31.1
+

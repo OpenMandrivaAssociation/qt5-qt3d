@@ -1,0 +1,164 @@
+From c5845d67be03d0f1f538422ba1ad181442b09819 Mon Sep 17 00:00:00 2001
+From: Mike Krus <mike.krus@kdab.com>
+Date: Wed, 18 Nov 2020 12:29:48 +0000
+Subject: [PATCH 09/19] Introduce QGeometryRendererPrivate::sortIndex
+
+Lets user override the sorting order of entities.
+
+Change-Id: Iab7fd0d705f7ddcb424a59f86f8c2c28059813d1
+Reviewed-by: Sean Harmer <sean.harmer@kdab.com>
+(cherry picked from commit c6aec09f4f6030fa11b9ba911e4c0df2fe7485b2)
+---
+ .../renderers/opengl/renderer/renderview.cpp  |  4 ++++
+ .../renderers/rhi/renderer/renderview.cpp     |  4 ++++
+ src/render/geometry/geometryrenderer.cpp      |  5 ++++
+ src/render/geometry/geometryrenderer_p.h      |  3 +++
+ src/render/geometry/qgeometryrenderer.cpp     | 24 ++++++++++++++++++-
+ src/render/geometry/qgeometryrenderer_p.h     |  1 +
+ 6 files changed, 40 insertions(+), 1 deletion(-)
+
+diff --git a/src/plugins/renderers/opengl/renderer/renderview.cpp b/src/plugins/renderers/opengl/renderer/renderview.cpp
+index 59b323398..8c2d5a39d 100644
+--- a/src/plugins/renderers/opengl/renderer/renderview.cpp
++++ b/src/plugins/renderers/opengl/renderer/renderview.cpp
+@@ -839,6 +839,10 @@ void RenderView::updateRenderCommand(const EntityRenderCommandDataSubView &subVi
+             // view vector. This gives a depth value suitable as the key
+             // for BackToFront sorting.
+             command.m_depth = Vector3D::dotProduct(entity->worldBoundingVolume()->center() - m_eyePos, m_eyeViewDir);
++
++            auto geometryRenderer = m_manager->geometryRendererManager()->data(command.m_geometryRenderer);
++            if (geometryRenderer && !qFuzzyCompare(geometryRenderer->sortIndex(), -1.f))
++                command.m_depth = geometryRenderer->sortIndex();
+         } else { // Compute
+             // Note: if frameCount has reached 0 in the previous frame, isEnabled
+             // would be false
+diff --git a/src/plugins/renderers/rhi/renderer/renderview.cpp b/src/plugins/renderers/rhi/renderer/renderview.cpp
+index 54295ef5f..344dc3a3b 100644
+--- a/src/plugins/renderers/rhi/renderer/renderview.cpp
++++ b/src/plugins/renderers/rhi/renderer/renderview.cpp
+@@ -826,6 +826,10 @@ void RenderView::updateRenderCommand(EntityRenderCommandData *renderCommandData,
+             command.m_depth = Vector3D::dotProduct(
+                     entity->worldBoundingVolume()->center() - m_data.m_eyePos, m_data.m_eyeViewDir);
+ 
++            auto geometryRenderer = m_manager->geometryRendererManager()->data(command.m_geometryRenderer);
++            if (geometryRenderer && !qFuzzyCompare(geometryRenderer->sortIndex(), -1.f))
++                command.m_depth = geometryRenderer->sortIndex();
++
+             environmentLight = m_environmentLight;
+             lightSources = m_lightSources;
+ 
+diff --git a/src/render/geometry/geometryrenderer.cpp b/src/render/geometry/geometryrenderer.cpp
+index 881c0f66b..ff7ed308f 100644
+--- a/src/render/geometry/geometryrenderer.cpp
++++ b/src/render/geometry/geometryrenderer.cpp
+@@ -71,6 +71,7 @@ GeometryRenderer::GeometryRenderer()
+     , m_primitiveType(QGeometryRenderer::Triangles)
+     , m_dirty(false)
+     , m_manager(nullptr)
++    , m_sortIndex(-1.f)
+ {
+ }
+ 
+@@ -96,6 +97,7 @@ void GeometryRenderer::cleanup()
+     m_geometryFactory.reset();
+     qDeleteAll(m_triangleVolumes);
+     m_triangleVolumes.clear();
++    m_sortIndex = -1.f;
+ }
+ 
+ void GeometryRenderer::setManager(GeometryRendererManager *manager)
+@@ -151,6 +153,9 @@ void GeometryRenderer::syncFromFrontEnd(const QNode *frontEnd, bool firstTime)
+         }
+     }
+ 
++    const auto dnode = static_cast<const QGeometryRendererPrivate*>(QGeometryRendererPrivate::get(node));
++    m_sortIndex = dnode->m_sortIndex;
++
+     markDirty(AbstractRenderer::GeometryDirty);
+ }
+ 
+diff --git a/src/render/geometry/geometryrenderer_p.h b/src/render/geometry/geometryrenderer_p.h
+index a38233d6c..411845819 100644
+--- a/src/render/geometry/geometryrenderer_p.h
++++ b/src/render/geometry/geometryrenderer_p.h
+@@ -104,6 +104,8 @@ public:
+     // Pick volumes job
+     QVector<RayCasting::QBoundingVolume *> triangleData() const;
+ 
++    float sortIndex() const { return m_sortIndex; }
++
+ private:
+     Qt3DCore::QNodeId m_geometryId;
+     int m_instanceCount;
+@@ -120,6 +122,7 @@ private:
+     QGeometryFactoryPtr m_geometryFactory;
+     GeometryRendererManager *m_manager;
+     QVector<RayCasting::QBoundingVolume *> m_triangleVolumes;
++    float m_sortIndex;
+ };
+ 
+ class GeometryRendererFunctor : public Qt3DCore::QBackendNodeMapper
+diff --git a/src/render/geometry/qgeometryrenderer.cpp b/src/render/geometry/qgeometryrenderer.cpp
+index 8720a5c00..7abbe8db8 100644
+--- a/src/render/geometry/qgeometryrenderer.cpp
++++ b/src/render/geometry/qgeometryrenderer.cpp
+@@ -48,6 +48,28 @@ using namespace Qt3DCore;
+ 
+ namespace Qt3DRender {
+ 
++/*
++    \internal
++
++    sortIndex property: overrides the sorting index when depth sorting is enabled.
++
++    If depth sorting is enabled on the frame graph, the renderer will sort
++    objects based on how far the center of the bounding volume is from
++    the camera and render objects from the furthest to the closest.
++
++    This property can be used to override the depth index and precisely
++    control the order in which objects are rendered. This is useful when
++    all objects are at the same physical distance from the camera.
++
++    The actual values are not significant, only that they define an order
++    to sort the objects. These are sorted such as the object with the
++    smallest value is drawn first, then the second smallest, and so on.
++
++    \note Setting this to -1.f will disable the explicit sorting for this
++    entity and revert to using the distance from the center of the bounding
++    volume.
++*/
++
+ QGeometryRendererPrivate::QGeometryRendererPrivate()
+     : QComponentPrivate()
+     , m_instanceCount(1)
+@@ -61,6 +83,7 @@ QGeometryRendererPrivate::QGeometryRendererPrivate()
+     , m_primitiveRestart(false)
+     , m_geometry(nullptr)
+     , m_primitiveType(QGeometryRenderer::Triangles)
++    , m_sortIndex(-1.f)
+ {
+ }
+ 
+@@ -194,7 +217,6 @@ QGeometryRendererPrivate::~QGeometryRendererPrivate()
+     \sa Qt3DRender::QGeometryRenderer::PrimitiveType
+  */
+ 
+-
+ /*!
+     Constructs a new QGeometryRenderer with \a parent.
+  */
+diff --git a/src/render/geometry/qgeometryrenderer_p.h b/src/render/geometry/qgeometryrenderer_p.h
+index 32ca334e3..323ab786c 100644
+--- a/src/render/geometry/qgeometryrenderer_p.h
++++ b/src/render/geometry/qgeometryrenderer_p.h
+@@ -82,6 +82,7 @@ public:
+     QGeometry *m_geometry;
+     QGeometryRenderer::PrimitiveType m_primitiveType;
+     QGeometryFactoryPtr m_geometryFactory;
++    float m_sortIndex;
+ };
+ 
+ struct QGeometryRendererData
+-- 
+2.31.1
+

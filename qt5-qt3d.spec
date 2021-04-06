@@ -25,17 +25,37 @@
 %define quickextrasd %mklibname qt%{major}3dquickextras -d
 
 Name:		qt5-qt3d
-Version:	5.15.2
+Version:	5.15.3
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 %define qttarballdir qt3d-everywhere-src-%{version}-%{beta}
 Source0:	http://download.qt.io/development_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}%{?beta:-%{beta}}/submodules/%{qttarballdir}.tar.xz
 %else
 Release:	1
-%define qttarballdir qt3d-everywhere-src-%{version}
-Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
+%define qttarballdir qt3d-everywhere-src-5.15.2
+Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/5.15.2/submodules/%{qttarballdir}.tar.xz
 %endif
 Patch0:		qt3d-clang10.patch
+# From KDE
+Patch1000:	0001-Bump-version.patch
+Patch1001:	0002-Add-caching-mechanism-to-ShaderBuilder.patch
+Patch1002:	0003-Add-dedicated-Qt3D.Renderer.ShaderCache-logging-cate.patch
+Patch1003:	0004-Handle-invalid-entity-names-in-QSceneLoader-componen.patch
+Patch1004:	0005-Check-if-texture-upload-is-full-sized.patch
+Patch1005:	0006-Fix-GLTexture-cleanup.patch
+Patch1006:	0007-Scene3DItem-release-frontend-backend-tree-on-destruc.patch
+Patch1007:	0008-Add-mipmaps-count-to-QAbstracTexturePrivate.patch
+Patch1008:	0009-Introduce-QGeometryRendererPrivate-sortIndex.patch
+Patch1009:	0010-Only-set-the-state-flag-after-having-merged-with-the.patch
+Patch1010:	0011-SyncRenderViewPreCommandUpdate-fix-a-few-odd-cases.patch
+Patch1011:	0012-OpenGL-renderer-fix-use-of-outdated-VAO-when-shader-.patch
+Patch1012:	0013-QShaderProgramBuilder-add-documentation-related-to-c.patch
+Patch1013:	0014-Fix-disabling-shader-cache-via-environment-variable.patch
+Patch1014:	0015-Fix-binding-of-CubeMapArray-textures.patch
+Patch1015:	0016-Allow-assimp-to-compile-on-non-gcc-compilers.patch
+Patch1016:	0017-Print-warning-about-using-primitive-restart-on-ES2.patch
+Patch1017:	0018-Fix-sampler2DArrayShadow-uniform-in-QShaderGenerator.patch
+Patch1018:	0019-qpicktriangleevent_p.h-Add-missing-private-API-warni.patch
 Summary:	Qt 3D toolkit
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
@@ -430,6 +450,8 @@ Development files for the Qt3DQuickExtras library.
 
 %prep
 %autosetup -n %qttarballdir -p1
+%{_libdir}/qt5/bin/syncqt.pl -version %{version}
+
 # disable examples due bug
 # https://bugreports.qt.io/browse/QTBUG-41301
 rm -rf examples/

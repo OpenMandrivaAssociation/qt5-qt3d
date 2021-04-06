@@ -1,0 +1,54 @@
+From fd5c3299553818e99421f54c1b819681335de9aa Mon Sep 17 00:00:00 2001
+From: Jim Albamont <jim.albamont@kdab.com>
+Date: Wed, 9 Dec 2020 14:21:23 -0800
+Subject: [PATCH 14/19] Fix disabling shader cache via environment variable
+
+The tests were a broken too because the QT3D_DISABLE_SHADER_CACHE
+environment var was still set from the previous test. These tests
+passed before because the shader builder used the cache if either the
+QT3D_DISABLE_SHADER_CACHE or QT3D_REBUILD_SHADER_CACHE are not set.
+
+Change-Id: Ic04bf3bb8bb7b9b27e3dc9663fe5e96647a3bed4
+Pick-to: dev 6.0
+Reviewed-by: Paul Lemire <paul.lemire@kdab.com>
+---
+ src/render/materialsystem/shaderbuilder.cpp           | 2 +-
+ tests/auto/render/shaderbuilder/tst_shaderbuilder.cpp | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/render/materialsystem/shaderbuilder.cpp b/src/render/materialsystem/shaderbuilder.cpp
+index 2b8938eb9..30a1938f3 100644
+--- a/src/render/materialsystem/shaderbuilder.cpp
++++ b/src/render/materialsystem/shaderbuilder.cpp
+@@ -237,7 +237,7 @@ void ShaderBuilder::generateCode(QShaderProgram::ShaderType type)
+ 
+     const QByteArray cacheKey = hashKeyForShaderGraph(type);
+     const bool forceRegenerate = qEnvironmentVariableIsSet("QT3D_REBUILD_SHADER_CACHE");
+-    const bool useCache = !qEnvironmentVariableIsSet("QT3D_DISABLE_SHADER_CACHE") || !forceRegenerate;
++    const bool useCache = !qEnvironmentVariableIsSet("QT3D_DISABLE_SHADER_CACHE") && !forceRegenerate;
+     const QByteArray userProvidedPath = qgetenv("QT3D_WRITABLE_CACHE_PATH");
+     const QString cachedFilterPath = QDir(userProvidedPath.isEmpty() ?
+                                               QStandardPaths::writableLocation(QStandardPaths::TempLocation)
+diff --git a/tests/auto/render/shaderbuilder/tst_shaderbuilder.cpp b/tests/auto/render/shaderbuilder/tst_shaderbuilder.cpp
+index 2bab9d6f5..5dac73a61 100644
+--- a/tests/auto/render/shaderbuilder/tst_shaderbuilder.cpp
++++ b/tests/auto/render/shaderbuilder/tst_shaderbuilder.cpp
+@@ -611,6 +611,7 @@ private slots:
+     void checkFileCaching()
+     {
+         // GIVEN
++        qunsetenv("QT3D_DISABLE_SHADER_CACHE");
+         QTemporaryDir cacheDir;
+ 
+         if (!cacheDir.isValid()) {
+@@ -687,6 +688,7 @@ private slots:
+     void checkRuntimeCaching()
+     {
+         // GIVEN
++        qunsetenv("QT3D_DISABLE_SHADER_CACHE");
+         TestRenderer renderer;
+         QTemporaryDir cacheDir;
+ 
+-- 
+2.31.1
+

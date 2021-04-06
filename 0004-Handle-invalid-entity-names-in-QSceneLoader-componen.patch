@@ -1,0 +1,50 @@
+From bff2f634bd4700173c8c0475f21dbbb491105aaf Mon Sep 17 00:00:00 2001
+From: Michael Brasser <mbrasser@ford.com>
+Date: Mon, 2 Nov 2020 08:25:53 -0600
+Subject: [PATCH 04/19] Handle invalid entity names in QSceneLoader::component
+
+Return nullptr rather than crashing.
+
+Change-Id: Ie11fe798e0bcd3bfdfda053331eabf9ed16e3d94
+Reviewed-by: Mike Krus <mike.krus@kdab.com>
+(cherry picked from commit 59387766853e64e70efb911772ea5dfe04ff5aad)
+Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+---
+ src/render/io/qsceneloader.cpp                      | 2 ++
+ tests/auto/render/qsceneloader/tst_qsceneloader.cpp | 7 +++++++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/src/render/io/qsceneloader.cpp b/src/render/io/qsceneloader.cpp
+index 2d53702f6..ce2aa034e 100644
+--- a/src/render/io/qsceneloader.cpp
++++ b/src/render/io/qsceneloader.cpp
+@@ -343,6 +343,8 @@ QComponent *QSceneLoader::component(const QString &entityName,
+                                     QSceneLoader::ComponentType componentType) const
+ {
+     QEntity *e = entity(entityName);
++    if (!e)
++        return nullptr;
+     const QComponentVector components = e->components();
+     for (auto component : components) {
+         switch (componentType) {
+diff --git a/tests/auto/render/qsceneloader/tst_qsceneloader.cpp b/tests/auto/render/qsceneloader/tst_qsceneloader.cpp
+index 79ca6a291..58f9ccced 100644
+--- a/tests/auto/render/qsceneloader/tst_qsceneloader.cpp
++++ b/tests/auto/render/qsceneloader/tst_qsceneloader.cpp
+@@ -180,6 +180,13 @@ private Q_SLOTS:
+         QCOMPARE(loader.entity(e3Name), &e3);
+         QCOMPARE(loader.entity(e4Name), &e4);
+ 
++        QCOMPARE(loader.component(e1Name, Qt3DRender::QSceneLoader::UnknownComponent), nullptr);
++        QCOMPARE(loader.component(e1Name, Qt3DRender::QSceneLoader::TransformComponent), nullptr);
++        QCOMPARE(loader.component(e1Name, Qt3DRender::QSceneLoader::GeometryRendererComponent), nullptr);
++        QCOMPARE(loader.component(e1Name, Qt3DRender::QSceneLoader::MaterialComponent), nullptr);
++        QCOMPARE(loader.component(e1Name, Qt3DRender::QSceneLoader::LightComponent), nullptr);
++        QCOMPARE(loader.component(e1Name, Qt3DRender::QSceneLoader::CameraLensComponent), nullptr);
++
+         QCOMPARE(loader.component(e2Name, Qt3DRender::QSceneLoader::UnknownComponent), nullptr);
+         QCOMPARE(loader.component(e2Name, Qt3DRender::QSceneLoader::TransformComponent), &trans);
+         QCOMPARE(loader.component(e2Name, Qt3DRender::QSceneLoader::GeometryRendererComponent), nullptr);
+-- 
+2.31.1
+
