@@ -1,0 +1,66 @@
+From 57e62c1e2293b9c534540a8569d145737d6a690f Mon Sep 17 00:00:00 2001
+From: Paul Lemire <paul.lemire@kdab.com>
+Date: Tue, 26 Jan 2021 15:09:26 +0100
+Subject: [PATCH 20/33] Fix light uniforms not properly being updated
+
+- We cache commands and only rebuild them when really needed. When we rebuild
+  then, we also store the mapping between uniform location and parameter name
+- When reusing a command, we only update the uniform values but expect the
+  mapping between to remain the same.
+- When dealing with lights however, we can end up in a case where the light type
+  changes, and therefore so does the shader data associated. The command remains
+  cached as nothing really requires a rebuid. Yet, this means we could
+  have more or less parameters than the number of mappings we have stored
+  previously if the shader data defines more or less properties. To account for
+  this, we now rebuild the mapping when building the command or if the number of
+  parameters in the parameter pack is different than at the previous frame.
+
+Change-Id: I2fb03449a33220f5144fc350dbe5f61eec8aa0fa
+(cherry picked from commit 8760e8254205732a4730f5d98994dd2f87a9f2e8)
+---
+ src/plugins/renderers/opengl/renderer/renderview.cpp         | 4 +++-
+ .../renderers/opengl/renderer/shaderparameterpack_p.h        | 5 +++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/plugins/renderers/opengl/renderer/renderview.cpp b/src/plugins/renderers/opengl/renderer/renderview.cpp
+index 8c2d5a39d..007fb07e0 100644
+--- a/src/plugins/renderers/opengl/renderer/renderview.cpp
++++ b/src/plugins/renderers/opengl/renderer/renderview.cpp
+@@ -1080,6 +1080,7 @@ void RenderView::setShaderAndUniforms(RenderCommand *command,
+         command->m_parameterPack.reserve(shader->parameterPackSize());
+     }
+ 
++    const size_t previousUniformCount = command->m_parameterPack.uniforms().size();
+     if (shader->hasActiveVariables()) {
+         const QVector<int> &standardUniformNamesIds = shader->standardUniformNameIds();
+ 
+@@ -1104,8 +1105,9 @@ void RenderView::setShaderAndUniforms(RenderCommand *command,
+         updateLightUniforms(command, entity);
+     }
+ 
++    const size_t actualUniformCount = command->m_parameterPack.uniforms().size();
+     // Prepare the ShaderParameterPack based on the active uniforms of the shader
+-    if (!updateUniformsOnly)
++    if (!updateUniformsOnly || previousUniformCount != actualUniformCount)
+         shader->prepareUniforms(command->m_parameterPack);
+ }
+ 
+diff --git a/src/plugins/renderers/opengl/renderer/shaderparameterpack_p.h b/src/plugins/renderers/opengl/renderer/shaderparameterpack_p.h
+index 5596c2937..841aae61a 100644
+--- a/src/plugins/renderers/opengl/renderer/shaderparameterpack_p.h
++++ b/src/plugins/renderers/opengl/renderer/shaderparameterpack_p.h
+@@ -105,6 +105,11 @@ struct PackUniformHash
+         values.reserve(count);
+     }
+ 
++    size_t size() const
++    {
++        return keys.size();
++    }
++
+     inline int indexForKey(int key) const
+     {
+         const auto b = keys.cbegin();
+-- 
+2.33.0
+

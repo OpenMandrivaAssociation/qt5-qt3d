@@ -1,0 +1,166 @@
+From fb5c551efef9b58a499b05d23ab7ac492bc01775 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Antti=20M=C3=A4=C3=A4tt=C3=A4?= <antti.maatta@qt.io>
+Date: Thu, 14 Jan 2021 16:03:22 +0200
+Subject: [PATCH 28/33] Fix parameter priorization documentation
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fixes: QTBUG-64110
+Change-Id: I09330ba29b0c120d6e7e0ae0b2bf8d4e388054e1
+Reviewed-by: Tomi Korpipää <tomi.korpipaa@qt.io>
+Reviewed-by: Paul Lemire <paul.lemire@kdab.com>
+(cherry picked from commit 9c6563c780eef3890c83b82ebbb0ebf271fb6897)
+Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+---
+ src/render/framegraph/qrenderpassfilter.cpp |  9 ++++++---
+ src/render/framegraph/qtechniquefilter.cpp  | 10 ++++++----
+ src/render/materialsystem/qeffect.cpp       | 10 ++++++----
+ src/render/materialsystem/qmaterial.cpp     | 10 ++++++----
+ src/render/materialsystem/qtechnique.cpp    | 12 ++++++------
+ 5 files changed, 30 insertions(+), 21 deletions(-)
+
+diff --git a/src/render/framegraph/qrenderpassfilter.cpp b/src/render/framegraph/qrenderpassfilter.cpp
+index 34462ebdf..f7fafb7d1 100644
+--- a/src/render/framegraph/qrenderpassfilter.cpp
++++ b/src/render/framegraph/qrenderpassfilter.cpp
+@@ -63,8 +63,8 @@ namespace Qt3DRender {
+     whose Qt3DRender::QFilterKey objects match the keys in QRenderPassFilter are
+     selected for rendering. If no QRenderPassFilter is present, then all QRenderPass
+     objects are selected for rendering. The parameters in the list can be used
+-    to set values for shader parameters. The parameters in QRenderPassFilter are
+-    overridden by parameters in QTechniqueFilter, QTechnique and QRenderPass.
++    to set values for shader parameters. The parameters in QRenderPassFilter
++    override parameters in QTechniqueFilter, QMaterial, QEffect, QTechnique and QRenderPass.
+ */
+ 
+ /*!
+@@ -79,7 +79,10 @@ namespace Qt3DRender {
+     objects are selected for drawing. When RenderPassFilter is present in the FrameGraph,
+     only the RenderPass objects, whose FilterKey objects match the keys
+     in RenderPassFilter are selected for rendering. If no RenderPassFilter is present,
+-    then all RenderPass objects are selected for rendering.
++    then all RenderPass objects are selected for rendering. RenderPassFilter
++    specifies a list of Parameter objects. The parameters in the list can be used
++    to set values for shader parameters. The parameters in RenderPassFilter
++    override parameters in TechniqueFilter, Material, Effect, Technique and RenderPass.
+ */
+ 
+ /*!
+diff --git a/src/render/framegraph/qtechniquefilter.cpp b/src/render/framegraph/qtechniquefilter.cpp
+index 5377e1297..2149d147e 100644
+--- a/src/render/framegraph/qtechniquefilter.cpp
++++ b/src/render/framegraph/qtechniquefilter.cpp
+@@ -65,8 +65,9 @@ QTechniqueFilterPrivate::QTechniqueFilterPrivate()
+     a list of Qt3DRender::QFilterKey objects and Qt3DRender::QParameter objects.
+     When QTechniqueFilter is present in the FrameGraph, only the techiques matching
+     the keys in the list are used for rendering. The parameters in the list can be used
+-    to set values for shader parameters. The parameters in QTechniqueFilter are
+-    overridden by parameters in QTechnique and QRenderPass.
++    to set values for shader parameters. The parameters in QTechniqueFilter
++    override parameters in QMaterial, QEffect, QTechnique and QRenderPass, but are overridden
++    by parameters in QRenderPassFilter.
+ */
+ 
+ /*!
+@@ -82,8 +83,9 @@ QTechniqueFilterPrivate::QTechniqueFilterPrivate()
+     a list of FilterKey objects and Parameter objects.
+     When TechniqueFilter is present in the FrameGraph, only the techiques matching
+     the keys in list are used for rendering. The parameters in the list can be used
+-    to set values for shader parameters. The parameters in TechniqueFilter are
+-    overridden by parameters in Technique and RenderPass.
++    to set values for shader parameters. The parameters in TechniqueFilter
++    override parameters in Material, Effect, Technique and RenderPass, but are overridden
++    by parameters in RenderPassFilter.
+ */
+ 
+ /*!
+diff --git a/src/render/materialsystem/qeffect.cpp b/src/render/materialsystem/qeffect.cpp
+index 9f4b3db94..01d887792 100644
+--- a/src/render/materialsystem/qeffect.cpp
++++ b/src/render/materialsystem/qeffect.cpp
+@@ -91,8 +91,9 @@ QEffectPrivate::QEffectPrivate()
+     effect->addTechnique(gl3Technique);
+     \endcode
+ 
+-    A QParameter defined on an Effect is overridden by a QParameter (of the same
+-    name) defined in a QMaterial, QTechniqueFilter, QRenderPassFilter.
++    A QParameter defined on a QEffect overrides parameter (of the same
++    name) defined in QTechnique and QRenderPass, but are overridden by parameter in
++    QRenderPassFilter, QTechniqueFilter and QMaterial.
+ 
+     \sa QMaterial, QTechnique, QParameter
+ */
+@@ -110,8 +111,9 @@ QEffectPrivate::QEffectPrivate()
+ 
+     An Effect instance should be shared among several Material instances when possible.
+ 
+-    A Parameter defined on an Effect is overridden by a QParameter (of the same
+-    name) defined in a Material, TechniqueFilter, RenderPassFilter.
++    A Parameter defined on a Effect overrides parameter (of the same
++    name) defined in Technique and RenderPass, but are overridden by parameter in
++    RenderPassFilter, TechniqueFilter and Material.
+ 
+     \note Effect node can not be disabled.
+ 
+diff --git a/src/render/materialsystem/qmaterial.cpp b/src/render/materialsystem/qmaterial.cpp
+index a1bec183b..f41dcacde 100644
+--- a/src/render/materialsystem/qmaterial.cpp
++++ b/src/render/materialsystem/qmaterial.cpp
+@@ -65,8 +65,9 @@
+     techniques, passes and shaders once while allowing to specify the material
+     by adding Parameter instances.
+ 
+-    A Parameter defined on a Material is overridden by a Parameter (of the same
+-    name) defined in a TechniqueFilter or a RenderPassFilter.
++    A Parameter defined on a Material overrides parameter (of the same
++    name) defined in a Effect, Technique and RenderPass, but are overridden by parameters in
++    RenderPassFilter and TechniqueFilter.
+ 
+     \code
+     Effect {
+@@ -133,8 +134,9 @@
+     techniques, passes and shaders once while allowing to specify the material
+     by adding QParameter instances.
+ 
+-    A QParameter defined on a QMaterial is overridden by a QParameter (of the same
+-    name) defined in a QTechniqueFilter or a QRenderPassFilter.
++    A QParameter defined on a QMaterial overrides parameter (of the same
++    name) defined in a QEffect, QTechnique and QRenderPass, but are overridden by parameter in
++    QRenderPassFilter and QTechniqueFilter.
+ 
+     \code
+     QMaterial *material1 = new QMaterial();
+diff --git a/src/render/materialsystem/qtechnique.cpp b/src/render/materialsystem/qtechnique.cpp
+index 0e1787938..caa8b0fb7 100644
+--- a/src/render/materialsystem/qtechnique.cpp
++++ b/src/render/materialsystem/qtechnique.cpp
+@@ -69,9 +69,9 @@ QTechniquePrivate::~QTechniquePrivate()
+     Parameter objects and a GraphicsApiFilter, which together define a
+     rendering technique the given graphics API can render. The filter keys are
+     used by TechniqueFilter to select specific techniques at specific parts of
+-    the FrameGraph. If two Parameter instances with the same name are specified
+-    in a Technique and a RenderPass, the one in Technique overrides the one
+-    used in the RenderPass.
++    the FrameGraph. A Parameter defined on a Technique overrides parameter
++    (of the same name) defined in RenderPass, but are overridden by
++    parameter in RenderPassFilter, TechniqueFilter, Material and Effect.
+ 
+     When creating an Effect that targets several versions of a graphics API, it
+     is useful to create several Technique nodes each with a graphicsApiFilter
+@@ -136,9 +136,9 @@ QTechniquePrivate::~QTechniquePrivate()
+     a Qt3DRender::QGraphicsApiFilter, which together define a rendering
+     technique the given graphics API can render. The filter keys are used by
+     Qt3DRender::QTechniqueFilter to select specific techniques at specific
+-    parts of the FrameGraph. If two QParameter instances with the same name are
+-    specified in a QTechnique and a QRenderPass, the one in Technique overrides
+-    the one used in the QRenderPass.
++    parts of the FrameGraph. A QParameter defined on a QTechnique overrides parameter
++    (of the same name) defined in QRenderPass, but are overridden by
++    parameter in QRenderPassFilter, QTechniqueFilter, QMaterial and QEffect.
+ 
+     When creating an QEffect that targets several versions of a graphics API,
+     it is useful to create several QTechnique nodes each with a
+-- 
+2.33.0
+

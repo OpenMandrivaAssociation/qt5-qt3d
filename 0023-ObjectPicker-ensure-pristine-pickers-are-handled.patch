@@ -1,0 +1,66 @@
+From 72b026a22e6942eca4b70ba948022aecbd8965fc Mon Sep 17 00:00:00 2001
+From: Nicolas Guichard <nicolas.guichard@kdab.com>
+Date: Thu, 25 Feb 2021 13:55:01 +0100
+Subject: [PATCH 23/33] ObjectPicker: ensure pristine pickers are handled
+
+When adding a QObjectPicker component to a QEntity, the object couldn't
+actually be picked until one of hoverEnabled, dragEnabled or priority
+changed.
+
+This fixes the issue by ensuring notifyJob is called at least once,
+when the picker is initialized.
+
+Pick-to: 6.1
+Change-Id: I5b035cf5be6ef1da35c2d24cf76bc2daaad9bc57
+Reviewed-by: Paul Lemire <paul.lemire@kdab.com>
+(cherry picked from commit 1641eae01636ddb82b668c4f91d2c26f89e5bc06)
+---
+ src/render/picking/objectpicker.cpp               |  5 +++++
+ .../auto/render/objectpicker/tst_objectpicker.cpp | 15 +++++++++++++++
+ 2 files changed, 20 insertions(+)
+
+diff --git a/src/render/picking/objectpicker.cpp b/src/render/picking/objectpicker.cpp
+index 2835d1b0e..182e1af55 100644
+--- a/src/render/picking/objectpicker.cpp
++++ b/src/render/picking/objectpicker.cpp
+@@ -83,6 +83,11 @@ void ObjectPicker::syncFromFrontEnd(const Qt3DCore::QNode *frontEnd, bool firstT
+ 
+     BackendNode::syncFromFrontEnd(frontEnd, firstTime);
+ 
++    if (firstTime) {
++        markDirty(AbstractRenderer::AllDirty);
++        notifyJob();
++    }
++
+     if (node->isHoverEnabled() != m_hoverEnabled) {
+         m_hoverEnabled = node->isHoverEnabled();
+         markDirty(AbstractRenderer::AllDirty);
+diff --git a/tests/auto/render/objectpicker/tst_objectpicker.cpp b/tests/auto/render/objectpicker/tst_objectpicker.cpp
+index 24fa2159d..b1898e040 100644
+--- a/tests/auto/render/objectpicker/tst_objectpicker.cpp
++++ b/tests/auto/render/objectpicker/tst_objectpicker.cpp
+@@ -40,6 +40,21 @@ class tst_ObjectPicker : public Qt3DCore::QBackendNodeTester
+     Q_OBJECT
+ private Q_SLOTS:
+ 
++    void checkInitialSync()
++    {
++        // GIVEN
++        TestRenderer renderer;
++        Qt3DRender::Render::ObjectPicker objectPicker;
++        Qt3DRender::QObjectPicker picker;
++
++        // WHEN
++        objectPicker.setRenderer(&renderer);
++        simulateInitializationSync(&picker, &objectPicker);
++
++        // THEN
++        QVERIFY(renderer.dirtyBits() != 0);
++    }
++
+     void checkPeerPropertyMirroring()
+     {
+         // GIVEN
+-- 
+2.33.0
+

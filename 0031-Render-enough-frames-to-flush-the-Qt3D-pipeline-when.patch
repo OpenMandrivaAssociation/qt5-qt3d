@@ -1,0 +1,90 @@
+From 4f9ee76b53f1c0242de5e67870a908e3df66c686 Mon Sep 17 00:00:00 2001
+From: Sean Harmer <sean.harmer@kdab.com>
+Date: Wed, 21 Oct 2020 12:07:53 +0100
+Subject: [PATCH 31/33] Render enough frames to flush the Qt3D pipeline when
+ dirty
+
+Sometimes Qt3D needs 2 frames if it involves introspecting and then
+compiling shaders. So render at least this many frames when needed.
+
+The change in formatting is pushed upon us by the clang-format use
+in the pre-commit hook.
+
+Change-Id: Ie9f48876351a8d1a7bd0df705a9e43831753ac69
+Reviewed-by: Mike Krus <mike.krus@kdab.com>
+(cherry picked from commit c2f6cfd0e4c382045a3391dd20809d9bd3b04311)
+Reviewed-by: Paul Lemire <paul.lemire@kdab.com>
+---
+ src/quick3d/imports/scene3d/scene3ditem.cpp | 27 ++++++++++++---------
+ src/quick3d/imports/scene3d/scene3ditem_p.h |  3 +++
+ 2 files changed, 19 insertions(+), 11 deletions(-)
+
+diff --git a/src/quick3d/imports/scene3d/scene3ditem.cpp b/src/quick3d/imports/scene3d/scene3ditem.cpp
+index 377569f6a..5c78d37ac 100644
+--- a/src/quick3d/imports/scene3d/scene3ditem.cpp
++++ b/src/quick3d/imports/scene3d/scene3ditem.cpp
+@@ -219,6 +219,7 @@ Scene3DItem::Scene3DItem(QQuickItem *parent)
+     , m_cameraAspectRatioMode(AutomaticAspectRatio)
+     , m_compositingMode(FBO)
+     , m_dummySurface(nullptr)
++    , m_framesToRender(ms_framesNeededToFlushPipeline)
+ {
+     setFlag(QQuickItem::ItemHasContents, true);
+     setAcceptedMouseButtons(Qt::MouseButtonMask);
+@@ -542,8 +543,13 @@ bool Scene3DItem::needsRender(QRenderAspect *renderAspect)
+             || (renderAspectPriv
+                 && renderAspectPriv->m_renderer
+                 && renderAspectPriv->m_renderer->shouldRender());
+-    m_dirty = false;
+-    return dirty;
++
++    if (m_dirty) {
++        --m_framesToRender;
++        if (m_framesToRender <= 0)
++            m_dirty = false;
++    }
++    return dirty || m_framesToRender > 0;
+ }
+ 
+ // This function is triggered in the context of the Main Thread
+@@ -911,15 +917,14 @@ QSGNode *Scene3DItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNode
+         updateWindowSurface();
+         managerNode->init();
+         // Note: ChangeArbiter is only set after aspect was registered
+-
+-        // This allows Scene3DItem to know when it needs to re-render as a result of frontend nodes receiving a change.
+-        QObject::connect(renderAspectPriv->m_aspectManager->changeArbiter(), &Qt3DCore::QChangeArbiter::receivedChange,
+-                         this, [this] { m_dirty = true; }, Qt::DirectConnection);
+-
+-        // This allows Scene3DItem to know when it needs to re-render as a result of backend nodes receiving a change.
+-        // For e.g. nodes being created/destroyed.
+-        QObject::connect(renderAspectPriv->m_aspectManager->changeArbiter(), &Qt3DCore::QChangeArbiter::syncedChanges,
+-                         this, [this] { m_dirty = true; }, Qt::QueuedConnection);
++        QObject::connect(
++                renderAspectPriv->m_aspectManager->changeArbiter(),
++                &Qt3DCore::QChangeArbiter::receivedChange, this,
++                [this] {
++                    m_dirty = true;
++                    m_framesToRender = ms_framesNeededToFlushPipeline;
++                },
++                Qt::DirectConnection);
+     }
+ 
+     const bool usesFBO = m_compositingMode == FBO;
+diff --git a/src/quick3d/imports/scene3d/scene3ditem_p.h b/src/quick3d/imports/scene3d/scene3ditem_p.h
+index 4a939aaab..3a6ca5007 100644
+--- a/src/quick3d/imports/scene3d/scene3ditem_p.h
++++ b/src/quick3d/imports/scene3d/scene3ditem_p.h
+@@ -169,6 +169,9 @@ private:
+     QOffscreenSurface *m_dummySurface;
+     QVector<Scene3DView *> m_views;
+     QMetaObject::Connection m_windowConnection;
++    qint8 m_framesToRender;
++
++    static const qint8 ms_framesNeededToFlushPipeline = 2;
+ };
+ 
+ } // Qt3DRender
+-- 
+2.33.0
+

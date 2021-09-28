@@ -24,14 +24,18 @@
 %define extrasd %mklibname qt%{major}3dextras -d
 %define quickextrasd %mklibname qt%{major}3dquickextras -d
 
+Summary:	Qt 3D toolkit
 Name:		qt5-qt3d
 Version:	5.15.3
+Group:		System/Libraries
+License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
+URL:		http://www.qt.io/
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 %define qttarballdir qt3d-everywhere-src-%{version}-%{beta}
 Source0:	http://download.qt.io/development_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}%{?beta:-%{beta}}/submodules/%{qttarballdir}.tar.xz
 %else
-Release:	1
+Release:	2
 %define qttarballdir qt3d-everywhere-src-5.15.2
 Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/5.15.2/submodules/%{qttarballdir}.tar.xz
 %endif
@@ -55,11 +59,21 @@ Patch1014:	0015-Fix-binding-of-CubeMapArray-textures.patch
 Patch1015:	0016-Allow-assimp-to-compile-on-non-gcc-compilers.patch
 Patch1016:	0017-Print-warning-about-using-primitive-restart-on-ES2.patch
 Patch1017:	0018-Fix-sampler2DArrayShadow-uniform-in-QShaderGenerator.patch
-Patch1018:	0019-qpicktriangleevent_p.h-Add-missing-private-API-warni.patch
-Summary:	Qt 3D toolkit
-Group:		System/Libraries
-License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
-URL:		http://www.qt.io/
+Patch1019:	0019-qpicktriangleevent_p.h-Add-missing-private-API-warni.patch
+Patch1020:	0020-Fix-light-uniforms-not-properly-being-updated.patch
+Patch1021:	0021-Restore-ObjectLevelLockingPolicy-on-ShaderManager.patch
+Patch1022:	0022-Add-missing-sampler-types-and-sizes-to-gl4-helpers.patch
+Patch1023:	0023-ObjectPicker-ensure-pristine-pickers-are-handled.patch
+Patch1024:	0024-Don-t-export-QKeyFrame-which-is-fully-implemented-in.patch
+Patch1025:	0025-Fix-multi-view-picking.patch
+Patch1026:	0026-Rerun-bounding-volume-update-jobs-when-entity-enable.patch
+Patch1027:	0027-CameraLens-use-ParametersDirty-rather-than-AllDirty.patch
+Patch1028:	0028-Fix-parameter-priorization-documentation.patch
+Patch1029:	0029-Fix-call-to-drawBuffers-in-SubmissionContext.patch
+Patch1030:	0030-Fix-for-QShaderNode-fix-that-selected-highest-versio.patch
+Patch1031:	0031-Render-enough-frames-to-flush-the-Qt3D-pipeline-when.patch
+Patch1032:	0032-Trigger-an-update-on-the-quick-window-when-creating-.patch
+Patch1033:	0033-Picking-reuse-LayerFilterJob-to-perform-layer-filter.patch
 BuildRequires:	qmake5 >= %{version}
 BuildRequires:	pkgconfig(Qt5Core) >= %{version}
 BuildRequires:	pkgconfig(Qt5Gui) >= %{version}
@@ -82,7 +96,7 @@ Requires:	%{quick} = %{EVRD}
 Requires:	%{quickrender} = %{EVRD}
 Requires:	%{quickscene2d} = %{EVRD}
 Requires:	%{render} = %{EVRD}
-Requires:       qt5-qtimageformats >= %{version}
+Requires:	qt5-qtimageformats >= %{version}
 Obsoletes:	%{mklibname qt53dcollision 5} < 5.6.0
 Obsoletes:	%{mklibname qt53dcollision -d} < 5.6.0
 # For the Provides: generator
@@ -94,7 +108,6 @@ Qt5 3D API.
 %files
 %{_libdir}/qt5/plugins/sceneparsers
 
-# ===
 %package devel
 Summary:	Development files for the Qt 3D library
 Group:		Development/KDE and Qt
@@ -115,7 +128,6 @@ Development files for the Qt 3D library.
 #% {_libdir}/qt5/examples/qt3d
 %{_libdir}/qt5/bin/qgltf
 
-# =====
 %package -n %{core}
 Summary:	Qt3D core library
 Group:		System/Libraries
@@ -147,7 +159,6 @@ Development files for the Qt3D core library.
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dcore.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dcore_private.pri
 
-# =====
 %package -n %{animation}
 Summary:	Qt3D animation library
 Group:		System/Libraries
@@ -175,7 +186,6 @@ Development files for the Qt3D animation library.
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3danimation.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3danimation_private.pri
 
-# =====
 %package -n %{input}
 Summary:	Qt3D input library
 Group:		System/Libraries
@@ -229,7 +239,7 @@ Development files for the Qt3D logic library.
 %{_libdir}/pkgconfig/Qt%{major}3DLogic.pc
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dlogic.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dlogic_private.pri
-# =====
+
 %package -n %{quick}
 Summary:	Qt3D QtQuick library
 Group:		System/Libraries
@@ -259,7 +269,6 @@ Development files for the Qt3D QtQuick library.
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquick.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquick_private.pri
 
-# =====
 %package -n %{quickanimation}
 Summary:	Qt3D Quick Animation library
 Group:		System/Libraries
@@ -287,7 +296,6 @@ Development files for the Qt3D Quick Animation library.
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickanimation.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickanimation_private.pri
 
-# =====
 %package -n %{quickinput}
 Summary:	Qt3D QuickInput library
 Group:		System/Libraries
@@ -315,7 +323,6 @@ Development files for the Qt3D QuickInput library.
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickinput.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickinput_private.pri
 
-# =====
 %package -n %{quickrender}
 Summary:	Qt3D QuickRender library
 Group:		System/Libraries
@@ -345,7 +352,6 @@ Development files for the Qt3D QuickRender library.
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickrender.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickrender_private.pri
 
-# =====
 %package -n %{quickscene2d}
 Summary:	Qt3D Quick 2D Scene library
 Group:		System/Libraries
@@ -375,7 +381,6 @@ Development files for the Qt3D Quick 2D Scene library.
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickscene2d.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3dquickscene2d_private.pri
 
-# =====
 %package -n %{render}
 Summary:	Qt3D render library
 Group:		System/Libraries
@@ -406,11 +411,9 @@ Development files for the Qt3D renderer library.
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3drender.pri
 %{_libdir}/qt%{major}/mkspecs/modules/qt_lib_3drender_private.pri
 
-
 %libpackage Qt53DExtras 5
 
 %libpackage Qt53DQuickExtras 5
-
 
 %package -n %{extrasd}
 Summary:	Development files for the Qt3DExtras library

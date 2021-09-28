@@ -1,0 +1,63 @@
+From 80adc190b8f7f536391e99698a0e5e1001c03ec4 Mon Sep 17 00:00:00 2001
+From: Paul Lemire <paul.lemire@kdab.com>
+Date: Thu, 29 Jul 2021 12:45:16 +0200
+Subject: [PATCH 30/33] Fix for QShaderNode fix that selected highest version
+ number of a rule
+
+The rule selection still has to be made from last added rule to first
+so that format.support works correctly.
+
+- Update QShaderNode unit tests
+
+Change-Id: I47af898ee0d82e91009efccf1dca9937feaca717
+Reviewed-by: Mike Krus <mike.krus@kdab.com>
+(cherry picked from commit 21168905a7eda8806543b490a0fae5a5a0ec7cad)
+Reviewed-by: Paul Lemire <paul.lemire@kdab.com>
+---
+ src/render/shadergraph/qshadernode.cpp             | 14 +++++++++-----
+ .../shadergraph/qshadernodes/tst_qshadernodes.cpp  |  4 ++--
+ 2 files changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/src/render/shadergraph/qshadernode.cpp b/src/render/shadergraph/qshadernode.cpp
+index e0421e006..56c9961f3 100644
+--- a/src/render/shadergraph/qshadernode.cpp
++++ b/src/render/shadergraph/qshadernode.cpp
+@@ -152,11 +152,15 @@ QVector<QShaderFormat> QShaderNode::availableFormats() const
+ 
+ QShaderNode::Rule QShaderNode::rule(const QShaderFormat &format) const
+ {
+-    const auto it = std::find_if(m_rules.crbegin(), m_rules.crend(),
+-                                 [format](const QPair<QShaderFormat, Rule> &entry) {
+-        return format.supports(entry.first);
+-    });
+-    return it != m_rules.crend() ? it->second : Rule();
++    const QPair<QShaderFormat, Rule> *selected = nullptr;
++    for (auto it = m_rules.crbegin(); it != m_rules.crend(); ++it) {
++        const auto &entry = *it;
++        if (format.supports(entry.first)) {
++            if (!selected || entry.first.version() > selected->first.version())
++                selected = &entry;
++        }
++    }
++    return selected ? selected->second : Rule();
+ }
+ 
+ QShaderNode::Rule::Rule(const QByteArray &subs, const QByteArrayList &snippets) noexcept
+diff --git a/tests/auto/render/shadergraph/qshadernodes/tst_qshadernodes.cpp b/tests/auto/render/shadergraph/qshadernodes/tst_qshadernodes.cpp
+index 2cd2ff90d..2c53de349 100644
+--- a/tests/auto/render/shadergraph/qshadernodes/tst_qshadernodes.cpp
++++ b/tests/auto/render/shadergraph/qshadernodes/tst_qshadernodes.cpp
+@@ -540,8 +540,8 @@ void tst_QShaderNodes::shouldHandleNodeRulesSupportAndOrder()
+     QCOMPARE(node.availableFormats().at(2), openGL3);
+     QCOMPARE(node.rule(openGLES2), es2Rule);
+     QCOMPARE(node.rule(openGL3), gl3bisRule);
+-    QCOMPARE(node.rule(openGL32), gl3bisRule);
+-    QCOMPARE(node.rule(openGL4), gl3bisRule);
++    QCOMPARE(node.rule(openGL32), gl32Rule);
++    QCOMPARE(node.rule(openGL4), gl32Rule);
+ }
+ 
+ QTEST_MAIN(tst_QShaderNodes)
+-- 
+2.33.0
+
