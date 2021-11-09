@@ -1,0 +1,119 @@
+From 0349d67e8cc68d5727a03002fb586e1fb684b894 Mon Sep 17 00:00:00 2001
+From: Paul Lemire <paul.lemire@kdab.com>
+Date: Wed, 3 Nov 2021 08:07:53 +0100
+Subject: [PATCH 34/35] ComputeCommand: call markDirty(ComputeDirty) when
+ enabled changes
+
+When using Manual run mode on a QComputeCommand, we rely on the enabled
+property changing to enable/disable the backend ComputeCommand for a given
+set of frames.
+
+Since we weren't setting any dirty flag when the enabled property changed,
+Qt 3D was not rebuilding the list of active compute commands but rather
+using the one stored in its cache. This resulted in the ComputeCommand, now
+disabled, to still be called for execution until something else triggered
+a command rebuild.
+
+The renderer calls ComputeDirty after it has executed a compute call.
+This explains why eventually we only had 2 calls (and not a perpetual loop)
+when calling trigger(1). One was the valid call, followed by the invalid one
+(and then the command list got rebuilt because of the ComputeDirty flag set by
+the renderer).
+
+Task-number: QTBUG-86493
+Change-Id: I7b31606a03609dc13294256b1dac89ee86730ba1
+Reviewed-by: Sean Harmer <sean.harmer@kdab.com>
+(cherry picked from commit 3d4ac623d444bbbaddc7f63163b204f6c6a55cab)
+Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+---
+ src/render/backend/computecommand.cpp            |  3 +++
+ .../render/computecommand/tst_computecommand.cpp | 16 ++++++++++++++++
+ 2 files changed, 19 insertions(+)
+
+diff --git a/src/render/backend/computecommand.cpp b/src/render/backend/computecommand.cpp
+index bc82291f0..b80f81eb2 100644
+--- a/src/render/backend/computecommand.cpp
++++ b/src/render/backend/computecommand.cpp
+@@ -81,7 +81,10 @@ void ComputeCommand::syncFromFrontEnd(const Qt3DCore::QNode *frontEnd, bool firs
+     if (!node)
+         return;
+ 
++    const bool wasEnabled = isEnabled();
+     BackendNode::syncFromFrontEnd(frontEnd, firstTime);
++    if (wasEnabled != isEnabled())
++        markDirty(AbstractRenderer::ComputeDirty);
+ 
+     if (m_workGroups[0] != node->workGroupX()) {
+         m_workGroups[0] = node->workGroupX();
+diff --git a/tests/auto/render/computecommand/tst_computecommand.cpp b/tests/auto/render/computecommand/tst_computecommand.cpp
+index d6fa1d579..e583a9c61 100644
+--- a/tests/auto/render/computecommand/tst_computecommand.cpp
++++ b/tests/auto/render/computecommand/tst_computecommand.cpp
+@@ -141,6 +141,10 @@ private Q_SLOTS:
+         backendComputeCommand.setRenderer(&renderer);
+         simulateInitializationSync(&computeCommand, &backendComputeCommand);
+ 
++        // THEN
++        QVERIFY(renderer.dirtyBits() & Qt3DRender::Render::AbstractRenderer::ComputeDirty);
++        renderer.clearDirtyBits(Qt3DRender::Render::AbstractRenderer::AllDirty);
++
+         {
+             // WHEN
+             const bool newValue = false;
+@@ -149,6 +153,8 @@ private Q_SLOTS:
+ 
+             // THEN
+             QCOMPARE(backendComputeCommand.isEnabled(), newValue);
++            QVERIFY(renderer.dirtyBits() & Qt3DRender::Render::AbstractRenderer::ComputeDirty);
++            renderer.clearDirtyBits(Qt3DRender::Render::AbstractRenderer::AllDirty);
+         }
+         {
+             // WHEN
+@@ -158,6 +164,8 @@ private Q_SLOTS:
+ 
+             // THEN
+             QCOMPARE(backendComputeCommand.x(), newValue);
++            QVERIFY(renderer.dirtyBits() & Qt3DRender::Render::AbstractRenderer::ComputeDirty);
++            renderer.clearDirtyBits(Qt3DRender::Render::AbstractRenderer::AllDirty);
+         }
+         {
+             // WHEN
+@@ -167,6 +175,8 @@ private Q_SLOTS:
+ 
+             // THEN
+             QCOMPARE(backendComputeCommand.y(), newValue);
++            QVERIFY(renderer.dirtyBits() & Qt3DRender::Render::AbstractRenderer::ComputeDirty);
++            renderer.clearDirtyBits(Qt3DRender::Render::AbstractRenderer::AllDirty);
+         }
+         {
+             // WHEN
+@@ -176,6 +186,8 @@ private Q_SLOTS:
+ 
+             // THEN
+             QCOMPARE(backendComputeCommand.z(), newValue);
++            QVERIFY(renderer.dirtyBits() & Qt3DRender::Render::AbstractRenderer::ComputeDirty);
++            renderer.clearDirtyBits(Qt3DRender::Render::AbstractRenderer::AllDirty);
+         }
+         {
+             // WHEN
+@@ -185,6 +197,8 @@ private Q_SLOTS:
+ 
+             // THEN
+             QCOMPARE(backendComputeCommand.runType(), newValue);
++            QVERIFY(renderer.dirtyBits() & Qt3DRender::Render::AbstractRenderer::ComputeDirty);
++            renderer.clearDirtyBits(Qt3DRender::Render::AbstractRenderer::AllDirty);
+         }
+         {
+             // WHEN
+@@ -194,6 +208,8 @@ private Q_SLOTS:
+ 
+             // THEN
+             QCOMPARE(backendComputeCommand.frameCount(), newValue);
++            QVERIFY(renderer.dirtyBits() & Qt3DRender::Render::AbstractRenderer::ComputeDirty);
++            renderer.clearDirtyBits(Qt3DRender::Render::AbstractRenderer::AllDirty);
+         }
+     }
+ 
+-- 
+2.33.1
+

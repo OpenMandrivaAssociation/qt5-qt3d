@@ -35,12 +35,12 @@ Release:	0.%{beta}.1
 %define qttarballdir qt3d-everywhere-src-%{version}-%{beta}
 Source0:	http://download.qt.io/development_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}%{?beta:-%{beta}}/submodules/%{qttarballdir}.tar.xz
 %else
-Release:	2
+Release:	3
 %define qttarballdir qt3d-everywhere-src-5.15.2
 Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/5.15.2/submodules/%{qttarballdir}.tar.xz
 %endif
 Patch0:		qt3d-clang10.patch
-# From KDE
+# From KDE https://invent.kde.org/qt/qt/qt3d -b kde/5.15
 Patch1000:	0001-Bump-version.patch
 Patch1001:	0002-Add-caching-mechanism-to-ShaderBuilder.patch
 Patch1002:	0003-Add-dedicated-Qt3D.Renderer.ShaderCache-logging-cate.patch
@@ -74,6 +74,8 @@ Patch1030:	0030-Fix-for-QShaderNode-fix-that-selected-highest-versio.patch
 Patch1031:	0031-Render-enough-frames-to-flush-the-Qt3D-pipeline-when.patch
 Patch1032:	0032-Trigger-an-update-on-the-quick-window-when-creating-.patch
 Patch1033:	0033-Picking-reuse-LayerFilterJob-to-perform-layer-filter.patch
+Patch1034:	0034-ComputeCommand-call-markDirty-ComputeDirty-when-enab.patch
+Patch1035:	0035-ObjectPicker-markDirty-AllDirty-when-we-change-the-e.patch
 BuildRequires:	qmake5 >= %{version}
 BuildRequires:	pkgconfig(Qt5Core) >= %{version}
 BuildRequires:	pkgconfig(Qt5Gui) >= %{version}
