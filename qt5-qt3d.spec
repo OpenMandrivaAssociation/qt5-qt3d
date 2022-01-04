@@ -35,7 +35,7 @@ Release:	0.%{beta}.1
 %define qttarballdir qt3d-everywhere-src-%{version}-%{beta}
 Source0:	http://download.qt.io/development_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}%{?beta:-%{beta}}/submodules/%{qttarballdir}.tar.xz
 %else
-Release:	3
+Release:	4
 %define qttarballdir qt3d-everywhere-src-5.15.2
 Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/5.15.2/submodules/%{qttarballdir}.tar.xz
 %endif
@@ -76,6 +76,11 @@ Patch1032:	0032-Trigger-an-update-on-the-quick-window-when-creating-.patch
 Patch1033:	0033-Picking-reuse-LayerFilterJob-to-perform-layer-filter.patch
 Patch1034:	0034-ComputeCommand-call-markDirty-ComputeDirty-when-enab.patch
 Patch1035:	0035-ObjectPicker-markDirty-AllDirty-when-we-change-the-e.patch
+Patch1036:	0036-OpenGL-Fix-content-not-updated-when-using-OnDemand-a.patch
+Patch1037:	0037-AnimationClip-fix-the-way-we-compute-the-duration.patch
+Patch1038:	0038-Revert-AnimationClip-fix-the-way-we-compute-the-dura.patch
+Patch1039:	0039-OpenGL-renderer-restore-surface-on-context-when-shut.patch
+
 BuildRequires:	qmake5 >= %{version}
 BuildRequires:	pkgconfig(Qt5Core) >= %{version}
 BuildRequires:	pkgconfig(Qt5Gui) >= %{version}
@@ -472,7 +477,7 @@ rm -rf examples/
 
 ## .prl/.la file love
 # nuke .prl reference(s) to %%buildroot, excessive (.la-like) libs
-pushd %{buildroot}%{_libdir}
+cd %{buildroot}%{_libdir}
 for prl_file in libQt5*.prl ; do
   sed -i -e "/^QMAKE_PRL_BUILD_DIR/d" ${prl_file}
   if [ -f "$(basename ${prl_file} .prl).so" ]; then
@@ -480,4 +485,4 @@ for prl_file in libQt5*.prl ; do
     sed -i -e "/^QMAKE_PRL_LIBS/d" ${prl_file}
   fi
 done
-popd
+cd -
