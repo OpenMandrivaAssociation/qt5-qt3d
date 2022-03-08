@@ -1,7 +1,7 @@
-From c636b80a6323dc99be82fa25c1904458ac711538 Mon Sep 17 00:00:00 2001
+From 7eb7e19898867551eb973c2587fcd9f7675f395f Mon Sep 17 00:00:00 2001
 From: Mauro Persano <mauro.persano@kdab.com>
 Date: Fri, 30 Apr 2021 16:37:06 -0300
-Subject: [PATCH 29/33] Fix call to drawBuffers in SubmissionContext
+Subject: [PATCH 08/18] Fix call to drawBuffers in SubmissionContext
 
 Implementations of GraphicsHelperInterface::drawBuffers expect an array
 of zero-based attachment point indexes (GL_COLOR_ATTACHMENT0 is added to
@@ -30,5 +30,5 @@ index ab5948e49..ef32594e1 100644
      }
  
 -- 
-2.33.0
+2.35.1
 

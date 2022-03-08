@@ -1,7 +1,7 @@
-From 9ea92434fda3b281f7fc1d10c701915405e249b7 Mon Sep 17 00:00:00 2001
+From 72247cea8456d9f676fc8f6df96786ad4aebd31d Mon Sep 17 00:00:00 2001
 From: Mike Krus <mike.krus@kdab.com>
 Date: Tue, 8 Jun 2021 13:14:21 +0100
-Subject: [PATCH 25/33] Fix multi-view picking
+Subject: [PATCH 05/18] Fix multi-view picking
 
 When using Scene3DView, qt3d still has a single scene graph and and a
 single framegraph. It automatically creates layers and layer filters
@@ -430,5 +430,5 @@ index 0c1ee0183..c090e0d6a 100644
  
  QTEST_MAIN(tst_PickBoundingVolumeJob)
 -- 
-2.33.0
+2.35.1
 

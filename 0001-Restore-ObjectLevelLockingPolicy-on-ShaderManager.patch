@@ -1,7 +1,7 @@
-From 63fe9a643018f30c85e21d2202c4f0c0667ac2bb Mon Sep 17 00:00:00 2001
+From 27ae2cc5e9e06b4520f05fc90223de5ee81e3325 Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Wed, 3 Mar 2021 12:08:51 +0100
-Subject: [PATCH 21/33] Restore ObjectLevelLockingPolicy on ShaderManager
+Subject: [PATCH 01/18] Restore ObjectLevelLockingPolicy on ShaderManager
 
 We are hitting a race condition otherwise. This is likely due to the fact
 that removing the shaders is done only once we have unloaded them from the
@@ -30,5 +30,5 @@ index a3d42d24a..864c168be 100644
  public:
      ShaderManager() {}
 -- 
-2.33.0
+2.35.1
 

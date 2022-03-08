@@ -1,7 +1,7 @@
-From 72b026a22e6942eca4b70ba948022aecbd8965fc Mon Sep 17 00:00:00 2001
+From 12b3b56ab1b0a1bc88f15af2f5cf5fd7a5a40f99 Mon Sep 17 00:00:00 2001
 From: Nicolas Guichard <nicolas.guichard@kdab.com>
 Date: Thu, 25 Feb 2021 13:55:01 +0100
-Subject: [PATCH 23/33] ObjectPicker: ensure pristine pickers are handled
+Subject: [PATCH 03/18] ObjectPicker: ensure pristine pickers are handled
 
 When adding a QObjectPicker component to a QEntity, the object couldn't
 actually be picked until one of hoverEnabled, dragEnabled or priority
@@ -62,5 +62,5 @@ index 24fa2159d..b1898e040 100644
      {
          // GIVEN
 -- 
-2.33.0
+2.35.1
 

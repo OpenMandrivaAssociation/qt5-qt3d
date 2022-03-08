@@ -1,7 +1,7 @@
-From c23826394c96e1e56cfcb612140a20d500dff315 Mon Sep 17 00:00:00 2001
+From 87e329c53504a567a3e71c9c7434b05a65b867cf Mon Sep 17 00:00:00 2001
 From: Jim Albamont <jim.albamont@kdab.com>
 Date: Thu, 10 Dec 2020 22:13:20 -0800
-Subject: [PATCH 22/33] Add missing sampler types and sizes to gl4 helpers
+Subject: [PATCH 02/18] Add missing sampler types and sizes to gl4 helpers
 
 In particular the CubeMapArray and CubeMapArrayShadow
 were missing from the call to get uniform size causing
@@ -84,5 +84,5 @@ index f23dd8485..a472da774 100644
      case GL_SAMPLER_2D_ARRAY:
      case GL_INT_SAMPLER_1D_ARRAY:
 -- 
-2.33.0
+2.35.1
 

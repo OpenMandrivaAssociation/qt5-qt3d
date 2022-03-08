@@ -1,7 +1,7 @@
-From aa7dad9063f845ec63c9da75bdf56aa40c2281e5 Mon Sep 17 00:00:00 2001
+From aecdab6d58221e70a48783084bdf32150f4867fc Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Wed, 5 May 2021 08:13:05 +0200
-Subject: [PATCH 24/33] Don't export QKeyFrame which is fully implemented in
+Subject: [PATCH 04/18] Don't export QKeyFrame which is fully implemented in
  the header
 
 This otherwise leads to inconsistent dll linkage warnigns on windows.
@@ -28,5 +28,5 @@ index 87e2812b2..a05e446dd 100644
  public:
      enum InterpolationType : quint8 {
 -- 
-2.33.0
+2.35.1
 

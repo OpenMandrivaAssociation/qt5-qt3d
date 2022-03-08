@@ -1,7 +1,7 @@
-From 279a73fd96762c7f7a43ad32c09a4cd46c465df6 Mon Sep 17 00:00:00 2001
+From 10ce48d8345c9c0fd151df70d7390e7d0488f270 Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Mon, 3 May 2021 14:39:18 +0200
-Subject: [PATCH 26/33] Rerun bounding volume update jobs when entity enabled
+Subject: [PATCH 06/18] Rerun bounding volume update jobs when entity enabled
  property changes
 
 Otherwise, this results in the bounding volume being out of sync with
@@ -63,5 +63,5 @@ index 9bd5df698..5d0ead7ef 100644
                   1 + // UpdateSkinningPalette
                   1 + // UpdateLevelOfDetail
 -- 
-2.33.0
+2.35.1
 

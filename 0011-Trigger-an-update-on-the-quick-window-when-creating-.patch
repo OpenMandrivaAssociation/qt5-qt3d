@@ -1,7 +1,7 @@
-From b65097673d44c0fdf9231882aeb385effc421de2 Mon Sep 17 00:00:00 2001
+From 0afc1f0df8e150c1a243fa3cadce0ae5ed425e11 Mon Sep 17 00:00:00 2001
 From: Sean Harmer <sean.harmer@kdab.com>
 Date: Wed, 21 Oct 2020 12:11:39 +0100
-Subject: [PATCH 32/33] Trigger an update on the quick window when creating a
+Subject: [PATCH 11/18] Trigger an update on the quick window when creating a
  render aspect
 
 Sometimes if a scene is large there is a timing issue that prevents
@@ -33,5 +33,5 @@ index 5c78d37ac..126680595 100644
  
      const bool usesFBO = m_compositingMode == FBO;
 -- 
-2.33.0
+2.35.1
 

@@ -1,7 +1,7 @@
-From c39d2e9268a83e1f3695ad6bc60dbc92212eae62 Mon Sep 17 00:00:00 2001
+From 5ca27e647d1ef58938083a6f69cf48909ce5fb42 Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Mon, 22 Nov 2021 10:43:34 +0100
-Subject: [PATCH 36/39] OpenGL: Fix content not updated when using OnDemand and
+Subject: [PATCH 15/18] OpenGL: Fix content not updated when using OnDemand and
  switching textures
 
 When changing a Parameter whose value is a texture, it takes Qt3D potentially
@@ -43,5 +43,5 @@ index 5c55d3bb9..7b1fbb92d 100644
  }
  
 -- 
-2.34.1
+2.35.1
 

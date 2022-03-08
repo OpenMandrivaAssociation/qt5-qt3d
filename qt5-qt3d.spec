@@ -35,52 +35,30 @@ Release:	0.%{beta}.1
 %define qttarballdir qt3d-everywhere-src-%{version}-%{beta}
 Source0:	http://download.qt.io/development_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}%{?beta:-%{beta}}/submodules/%{qttarballdir}.tar.xz
 %else
-Release:	4
-%define qttarballdir qt3d-everywhere-src-5.15.2
-Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/5.15.2/submodules/%{qttarballdir}.tar.xz
+Release:	5
+%define qttarballdir qt3d-everywhere-opensource-src-%{version}
+Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
 %endif
 Patch0:		qt3d-clang10.patch
 # From KDE https://invent.kde.org/qt/qt/qt3d -b kde/5.15
-Patch1000:	0001-Bump-version.patch
-Patch1001:	0002-Add-caching-mechanism-to-ShaderBuilder.patch
-Patch1002:	0003-Add-dedicated-Qt3D.Renderer.ShaderCache-logging-cate.patch
-Patch1003:	0004-Handle-invalid-entity-names-in-QSceneLoader-componen.patch
-Patch1004:	0005-Check-if-texture-upload-is-full-sized.patch
-Patch1005:	0006-Fix-GLTexture-cleanup.patch
-Patch1006:	0007-Scene3DItem-release-frontend-backend-tree-on-destruc.patch
-Patch1007:	0008-Add-mipmaps-count-to-QAbstracTexturePrivate.patch
-Patch1008:	0009-Introduce-QGeometryRendererPrivate-sortIndex.patch
-Patch1009:	0010-Only-set-the-state-flag-after-having-merged-with-the.patch
-Patch1010:	0011-SyncRenderViewPreCommandUpdate-fix-a-few-odd-cases.patch
-Patch1011:	0012-OpenGL-renderer-fix-use-of-outdated-VAO-when-shader-.patch
-Patch1012:	0013-QShaderProgramBuilder-add-documentation-related-to-c.patch
-Patch1013:	0014-Fix-disabling-shader-cache-via-environment-variable.patch
-Patch1014:	0015-Fix-binding-of-CubeMapArray-textures.patch
-Patch1015:	0016-Allow-assimp-to-compile-on-non-gcc-compilers.patch
-Patch1016:	0017-Print-warning-about-using-primitive-restart-on-ES2.patch
-Patch1017:	0018-Fix-sampler2DArrayShadow-uniform-in-QShaderGenerator.patch
-Patch1019:	0019-qpicktriangleevent_p.h-Add-missing-private-API-warni.patch
-Patch1020:	0020-Fix-light-uniforms-not-properly-being-updated.patch
-Patch1021:	0021-Restore-ObjectLevelLockingPolicy-on-ShaderManager.patch
-Patch1022:	0022-Add-missing-sampler-types-and-sizes-to-gl4-helpers.patch
-Patch1023:	0023-ObjectPicker-ensure-pristine-pickers-are-handled.patch
-Patch1024:	0024-Don-t-export-QKeyFrame-which-is-fully-implemented-in.patch
-Patch1025:	0025-Fix-multi-view-picking.patch
-Patch1026:	0026-Rerun-bounding-volume-update-jobs-when-entity-enable.patch
-Patch1027:	0027-CameraLens-use-ParametersDirty-rather-than-AllDirty.patch
-Patch1028:	0028-Fix-parameter-priorization-documentation.patch
-Patch1029:	0029-Fix-call-to-drawBuffers-in-SubmissionContext.patch
-Patch1030:	0030-Fix-for-QShaderNode-fix-that-selected-highest-versio.patch
-Patch1031:	0031-Render-enough-frames-to-flush-the-Qt3D-pipeline-when.patch
-Patch1032:	0032-Trigger-an-update-on-the-quick-window-when-creating-.patch
-Patch1033:	0033-Picking-reuse-LayerFilterJob-to-perform-layer-filter.patch
-Patch1034:	0034-ComputeCommand-call-markDirty-ComputeDirty-when-enab.patch
-Patch1035:	0035-ObjectPicker-markDirty-AllDirty-when-we-change-the-e.patch
-Patch1036:	0036-OpenGL-Fix-content-not-updated-when-using-OnDemand-a.patch
-Patch1037:	0037-AnimationClip-fix-the-way-we-compute-the-duration.patch
-Patch1038:	0038-Revert-AnimationClip-fix-the-way-we-compute-the-dura.patch
-Patch1039:	0039-OpenGL-renderer-restore-surface-on-context-when-shut.patch
-
+Patch1000:	0001-Restore-ObjectLevelLockingPolicy-on-ShaderManager.patch
+Patch1001:	0002-Add-missing-sampler-types-and-sizes-to-gl4-helpers.patch
+Patch1002:	0003-ObjectPicker-ensure-pristine-pickers-are-handled.patch
+Patch1003:	0004-Don-t-export-QKeyFrame-which-is-fully-implemented-in.patch
+Patch1004:	0005-Fix-multi-view-picking.patch
+Patch1005:	0006-Rerun-bounding-volume-update-jobs-when-entity-enable.patch
+Patch1006:	0007-CameraLens-use-ParametersDirty-rather-than-AllDirty.patch
+Patch1007:	0008-Fix-call-to-drawBuffers-in-SubmissionContext.patch
+Patch1008:	0009-Fix-for-QShaderNode-fix-that-selected-highest-versio.patch
+Patch1009:	0010-Render-enough-frames-to-flush-the-Qt3D-pipeline-when.patch
+Patch1010:	0011-Trigger-an-update-on-the-quick-window-when-creating-.patch
+Patch1011:	0012-Picking-reuse-LayerFilterJob-to-perform-layer-filter.patch
+Patch1012:	0013-ComputeCommand-call-markDirty-ComputeDirty-when-enab.patch
+Patch1013:	0014-ObjectPicker-markDirty-AllDirty-when-we-change-the-e.patch
+Patch1014:	0015-OpenGL-Fix-content-not-updated-when-using-OnDemand-a.patch
+Patch1015:	0016-AnimationClip-fix-the-way-we-compute-the-duration.patch
+Patch1016:	0017-Revert-AnimationClip-fix-the-way-we-compute-the-dura.patch
+Patch1017:	0018-OpenGL-renderer-restore-surface-on-context-when-shut.patch
 BuildRequires:	qmake5 >= %{version}
 BuildRequires:	pkgconfig(Qt5Core) >= %{version}
 BuildRequires:	pkgconfig(Qt5Gui) >= %{version}
@@ -459,7 +437,7 @@ Development files for the Qt3DQuickExtras library.
 #------------------------------------------------------------------------------
 
 %prep
-%autosetup -n %qttarballdir -p1
+%autosetup -n %(echo %qttarballdir|sed -e 's,-opensource,,') -p1
 %{_libdir}/qt5/bin/syncqt.pl -version %{version}
 
 # disable examples due bug
