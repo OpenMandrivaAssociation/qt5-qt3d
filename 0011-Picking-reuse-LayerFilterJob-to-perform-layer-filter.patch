@@ -1,7 +1,7 @@
-From 88b3e305d375dd00e3ec3bc5c9c2abda61f70d08 Mon Sep 17 00:00:00 2001
+From 5bb37d210f66713e4aed106221ea205d044841a6 Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Thu, 29 Jul 2021 15:19:59 +0200
-Subject: [PATCH 12/18] Picking: reuse LayerFilterJob to perform layer
+Subject: [PATCH 11/17] Picking: reuse LayerFilterJob to perform layer
  filtering
 
 This fixes picking for cases where multiple LayerFilters using different
@@ -979,5 +979,5 @@ index 9eb73cbd6..6638d88d9 100644
  
  void initializeJob(Qt3DRender::Render::RayCastingJob *job, Qt3DRender::TestAspect *test)
 -- 
-2.35.1
+2.36.1
 

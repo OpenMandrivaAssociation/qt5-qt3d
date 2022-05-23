@@ -26,7 +26,7 @@
 
 Summary:	Qt 3D toolkit
 Name:		qt5-qt3d
-Version:	5.15.3
+Version:	5.15.4
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
 URL:		http://www.qt.io/
@@ -35,30 +35,29 @@ Release:	0.%{beta}.1
 %define qttarballdir qt3d-everywhere-src-%{version}-%{beta}
 Source0:	http://download.qt.io/development_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}%{?beta:-%{beta}}/submodules/%{qttarballdir}.tar.xz
 %else
-Release:	5
+Release:	1
 %define qttarballdir qt3d-everywhere-opensource-src-%{version}
 Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
 %endif
 Patch0:		qt3d-clang10.patch
 # From KDE https://invent.kde.org/qt/qt/qt3d -b kde/5.15
-Patch1000:	0001-Restore-ObjectLevelLockingPolicy-on-ShaderManager.patch
-Patch1001:	0002-Add-missing-sampler-types-and-sizes-to-gl4-helpers.patch
-Patch1002:	0003-ObjectPicker-ensure-pristine-pickers-are-handled.patch
-Patch1003:	0004-Don-t-export-QKeyFrame-which-is-fully-implemented-in.patch
-Patch1004:	0005-Fix-multi-view-picking.patch
-Patch1005:	0006-Rerun-bounding-volume-update-jobs-when-entity-enable.patch
-Patch1006:	0007-CameraLens-use-ParametersDirty-rather-than-AllDirty.patch
-Patch1007:	0008-Fix-call-to-drawBuffers-in-SubmissionContext.patch
-Patch1008:	0009-Fix-for-QShaderNode-fix-that-selected-highest-versio.patch
-Patch1009:	0010-Render-enough-frames-to-flush-the-Qt3D-pipeline-when.patch
-Patch1010:	0011-Trigger-an-update-on-the-quick-window-when-creating-.patch
-Patch1011:	0012-Picking-reuse-LayerFilterJob-to-perform-layer-filter.patch
-Patch1012:	0013-ComputeCommand-call-markDirty-ComputeDirty-when-enab.patch
-Patch1013:	0014-ObjectPicker-markDirty-AllDirty-when-we-change-the-e.patch
-Patch1014:	0015-OpenGL-Fix-content-not-updated-when-using-OnDemand-a.patch
-Patch1015:	0016-AnimationClip-fix-the-way-we-compute-the-duration.patch
-Patch1016:	0017-Revert-AnimationClip-fix-the-way-we-compute-the-dura.patch
-Patch1017:	0018-OpenGL-renderer-restore-surface-on-context-when-shut.patch
+Patch1000:	0001-Add-missing-sampler-types-and-sizes-to-gl4-helpers.patch
+Patch1001:	0002-ObjectPicker-ensure-pristine-pickers-are-handled.patch
+Patch1002:	0003-Don-t-export-QKeyFrame-which-is-fully-implemented-in.patch
+Patch1003:	0004-Fix-multi-view-picking.patch
+Patch1004:	0005-Rerun-bounding-volume-update-jobs-when-entity-enable.patch
+Patch1005:	0006-CameraLens-use-ParametersDirty-rather-than-AllDirty.patch
+Patch1006:	0007-Fix-call-to-drawBuffers-in-SubmissionContext.patch
+Patch1007:	0008-Fix-for-QShaderNode-fix-that-selected-highest-versio.patch
+Patch1008:	0009-Render-enough-frames-to-flush-the-Qt3D-pipeline-when.patch
+Patch1009:	0010-Trigger-an-update-on-the-quick-window-when-creating-.patch
+Patch1010:	0011-Picking-reuse-LayerFilterJob-to-perform-layer-filter.patch
+Patch1011:	0012-ComputeCommand-call-markDirty-ComputeDirty-when-enab.patch
+Patch1012:	0013-ObjectPicker-markDirty-AllDirty-when-we-change-the-e.patch
+Patch1013:	0014-OpenGL-Fix-content-not-updated-when-using-OnDemand-a.patch
+Patch1014:	0015-AnimationClip-fix-the-way-we-compute-the-duration.patch
+Patch1015:	0016-Revert-AnimationClip-fix-the-way-we-compute-the-dura.patch
+Patch1016:	0017-OpenGL-renderer-restore-surface-on-context-when-shut.patch
 BuildRequires:	qmake5 >= %{version}
 BuildRequires:	pkgconfig(Qt5Core) >= %{version}
 BuildRequires:	pkgconfig(Qt5Gui) >= %{version}
