@@ -1,7 +1,7 @@
-From 5352db3b29f29684c5959f9cac47dc81835a2d9d Mon Sep 17 00:00:00 2001
+From a0dd8d74c44b0816650efec48acf474623fc4529 Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Thu, 29 Jul 2021 08:27:21 +0200
-Subject: [PATCH 06/17] CameraLens: use ParametersDirty rather than AllDirty
+Subject: [PATCH 05/15] CameraLens: use ParametersDirty rather than AllDirty
 
 AllDirty would force a lot of recomputations that aren't needed.
 When the CameraLens changes the only things we need to do are:
@@ -38,5 +38,5 @@ index 9b8d7d710..743749210 100644
  
      const QCameraLensPrivate *d = static_cast<const QCameraLensPrivate *>(QNodePrivate::get(node));
 -- 
-2.36.1
+2.37.0
 

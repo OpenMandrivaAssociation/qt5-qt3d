@@ -26,7 +26,7 @@
 
 Summary:	Qt 3D toolkit
 Name:		qt5-qt3d
-Version:	5.15.4
+Version:	5.15.5
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
 URL:		http://www.qt.io/
@@ -42,22 +42,20 @@ Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f
 Patch0:		qt3d-clang10.patch
 # From KDE https://invent.kde.org/qt/qt/qt3d -b kde/5.15
 Patch1000:	0001-Add-missing-sampler-types-and-sizes-to-gl4-helpers.patch
-Patch1001:	0002-ObjectPicker-ensure-pristine-pickers-are-handled.patch
-Patch1002:	0003-Don-t-export-QKeyFrame-which-is-fully-implemented-in.patch
-Patch1003:	0004-Fix-multi-view-picking.patch
-Patch1004:	0005-Rerun-bounding-volume-update-jobs-when-entity-enable.patch
-Patch1005:	0006-CameraLens-use-ParametersDirty-rather-than-AllDirty.patch
-Patch1006:	0007-Fix-call-to-drawBuffers-in-SubmissionContext.patch
-Patch1007:	0008-Fix-for-QShaderNode-fix-that-selected-highest-versio.patch
-Patch1008:	0009-Render-enough-frames-to-flush-the-Qt3D-pipeline-when.patch
-Patch1009:	0010-Trigger-an-update-on-the-quick-window-when-creating-.patch
-Patch1010:	0011-Picking-reuse-LayerFilterJob-to-perform-layer-filter.patch
-Patch1011:	0012-ComputeCommand-call-markDirty-ComputeDirty-when-enab.patch
-Patch1012:	0013-ObjectPicker-markDirty-AllDirty-when-we-change-the-e.patch
-Patch1013:	0014-OpenGL-Fix-content-not-updated-when-using-OnDemand-a.patch
-Patch1014:	0015-AnimationClip-fix-the-way-we-compute-the-duration.patch
-Patch1015:	0016-Revert-AnimationClip-fix-the-way-we-compute-the-dura.patch
-Patch1016:	0017-OpenGL-renderer-restore-surface-on-context-when-shut.patch
+Patch1001:	0002-Don-t-export-QKeyFrame-which-is-fully-implemented-in.patch
+Patch1002:	0003-Fix-multi-view-picking.patch
+Patch1003:	0004-Rerun-bounding-volume-update-jobs-when-entity-enable.patch
+Patch1004:	0005-CameraLens-use-ParametersDirty-rather-than-AllDirty.patch
+Patch1005:	0006-Fix-for-QShaderNode-fix-that-selected-highest-versio.patch
+Patch1006:	0007-Render-enough-frames-to-flush-the-Qt3D-pipeline-when.patch
+Patch1007:	0008-Trigger-an-update-on-the-quick-window-when-creating-.patch
+Patch1008:	0009-Picking-reuse-LayerFilterJob-to-perform-layer-filter.patch
+Patch1009:	0010-ComputeCommand-call-markDirty-ComputeDirty-when-enab.patch
+Patch1010:	0011-ObjectPicker-markDirty-AllDirty-when-we-change-the-e.patch
+Patch1011:	0012-OpenGL-Fix-content-not-updated-when-using-OnDemand-a.patch
+Patch1012:	0013-AnimationClip-fix-the-way-we-compute-the-duration.patch
+Patch1013:	0014-Revert-AnimationClip-fix-the-way-we-compute-the-dura.patch
+Patch1014:	0015-OpenGL-renderer-restore-surface-on-context-when-shut.patch
 BuildRequires:	qmake5 >= %{version}
 BuildRequires:	pkgconfig(Qt5Core) >= %{version}
 BuildRequires:	pkgconfig(Qt5Gui) >= %{version}

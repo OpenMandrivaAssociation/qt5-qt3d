@@ -1,7 +1,7 @@
-From 7f9ebf287aa374f6b4fc32b15f179545e042f942 Mon Sep 17 00:00:00 2001
+From 3aee8136a3359122a1d7f764ecb4724347ea0b3b Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Wed, 3 Nov 2021 08:07:53 +0100
-Subject: [PATCH 12/17] ComputeCommand: call markDirty(ComputeDirty) when
+Subject: [PATCH 10/15] ComputeCommand: call markDirty(ComputeDirty) when
  enabled changes
 
 When using Manual run mode on a QComputeCommand, we rely on the enabled
@@ -115,5 +115,5 @@ index d6fa1d579..e583a9c61 100644
      }
  
 -- 
-2.36.1
+2.37.0
 

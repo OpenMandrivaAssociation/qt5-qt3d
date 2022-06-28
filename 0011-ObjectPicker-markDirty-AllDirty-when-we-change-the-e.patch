@@ -1,7 +1,7 @@
-From 1748c8ffa487881c3e533b40b2ba3dfbd33e97cc Mon Sep 17 00:00:00 2001
+From e4647ffac8006343d9a3afc8ceac09358ad3ded5 Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Mon, 18 Oct 2021 11:23:33 +0200
-Subject: [PATCH 13/17] ObjectPicker: markDirty(AllDirty) when we change the
+Subject: [PATCH 11/15] ObjectPicker: markDirty(AllDirty) when we change the
  enabled property
 
 Otherwise we would simply change it internally but this wouldn't lead
@@ -48,5 +48,5 @@ index 182e1af55..cc2ebbf15 100644
  
  void ObjectPicker::notifyJob()
 -- 
-2.36.1
+2.37.0
 

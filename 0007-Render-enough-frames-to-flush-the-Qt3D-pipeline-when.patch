@@ -1,7 +1,7 @@
-From 6a0906e0ef5f2161a28966cefd28177cb8100fbb Mon Sep 17 00:00:00 2001
+From e022f00119905e77ceb9eb6a3e8c94a234e40781 Mon Sep 17 00:00:00 2001
 From: Sean Harmer <sean.harmer@kdab.com>
 Date: Wed, 21 Oct 2020 12:07:53 +0100
-Subject: [PATCH 09/17] Render enough frames to flush the Qt3D pipeline when
+Subject: [PATCH 07/15] Render enough frames to flush the Qt3D pipeline when
  dirty
 
 Sometimes Qt3D needs 2 frames if it involves introspecting and then
@@ -86,5 +86,5 @@ index 4a939aaab..3a6ca5007 100644
  
  } // Qt3DRender
 -- 
-2.36.1
+2.37.0
 
