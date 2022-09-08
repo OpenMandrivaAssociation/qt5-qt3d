@@ -1,7 +1,7 @@
-From ade4615e21abc4cf2994edb4ae6bf8ea17668f97 Mon Sep 17 00:00:00 2001
+From 19c8baf00b41170f68629a92a56467fe676ce074 Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Thu, 25 Nov 2021 15:52:09 +0100
-Subject: [PATCH 14/15] Revert "AnimationClip: fix the way we compute the
+Subject: [PATCH 5/6] Revert "AnimationClip: fix the way we compute the
  duration"
 
 Turns out we want the global clip duration and not the relative clip duration.
@@ -45,5 +45,5 @@ index c72e41157..78152c5bc 100644
  
  int AnimationClip::findChannelComponentCount()
 -- 
-2.37.0
+2.37.2
 

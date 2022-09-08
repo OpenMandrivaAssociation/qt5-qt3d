@@ -1,8 +1,8 @@
-From 3aee8136a3359122a1d7f764ecb4724347ea0b3b Mon Sep 17 00:00:00 2001
+From 7af6879ee18eb0ba6041cd02f3a0d629dcc8e5ad Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Wed, 3 Nov 2021 08:07:53 +0100
-Subject: [PATCH 10/15] ComputeCommand: call markDirty(ComputeDirty) when
- enabled changes
+Subject: [PATCH 1/6] ComputeCommand: call markDirty(ComputeDirty) when enabled
+ changes
 
 When using Manual run mode on a QComputeCommand, we rely on the enabled
 property changing to enable/disable the backend ComputeCommand for a given
@@ -115,5 +115,5 @@ index d6fa1d579..e583a9c61 100644
      }
  
 -- 
-2.37.0
+2.37.2
 

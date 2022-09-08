@@ -1,7 +1,7 @@
-From b3620f04644a60789ca93802247f2e5fa449d4cc Mon Sep 17 00:00:00 2001
+From 41f4e7f5d3e4583d6390a300df6638797631b568 Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Tue, 23 Nov 2021 09:27:43 +0100
-Subject: [PATCH 13/15] AnimationClip: fix the way we compute the duration
+Subject: [PATCH 4/6] AnimationClip: fix the way we compute the duration
 
 We wrongly assumed the start time of a clip was always 0. In practice this
 might not be the case. Therefore, we now compute duration as tEnd - tStart.
@@ -43,5 +43,5 @@ index 2c7e4fffb..c72e41157 100644
  
  int AnimationClip::findChannelComponentCount()
 -- 
-2.37.0
+2.37.2
 

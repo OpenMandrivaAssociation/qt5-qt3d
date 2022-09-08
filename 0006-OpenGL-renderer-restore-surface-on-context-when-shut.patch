@@ -1,8 +1,8 @@
-From 3cc801c4ae41ff3f155258c4bf7e21bb5b3f6a3d Mon Sep 17 00:00:00 2001
+From fe5fca853c09c7e03a2ff66dac21584e3307984d Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Fri, 26 Nov 2021 11:47:23 +0100
-Subject: [PATCH 15/15] OpenGL renderer: restore surface on context when
- shutting down
+Subject: [PATCH 6/6] OpenGL renderer: restore surface on context when shutting
+ down
 
 When using a QQuickWidget and Qt3D, on shutdown and assert occurs.
 This is the result of the QQuickWidget expecting the surface on the context
@@ -110,5 +110,5 @@ index 7b1fbb92d..4de847bf3 100644
          qWarning() << "Failed to make context current: OpenGL resources will not be destroyed";
      }
 -- 
-2.37.0
+2.37.2
 
