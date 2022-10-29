@@ -1,4 +1,4 @@
-From 7ce2846d1fc93f196258cf2b125ef1f9370a461c Mon Sep 17 00:00:00 2001
+From 187cd2b4c5c271e23973041eb12f2ef4a1bdcf2d Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Mon, 22 Nov 2021 10:43:34 +0100
 Subject: [PATCH 3/6] OpenGL: Fix content not updated when using OnDemand and
@@ -43,5 +43,5 @@ index 5c55d3bb9..7b1fbb92d 100644
  }
  
 -- 
-2.37.2
+2.38.1
 

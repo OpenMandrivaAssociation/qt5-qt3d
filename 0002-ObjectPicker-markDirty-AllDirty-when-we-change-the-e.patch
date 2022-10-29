@@ -1,4 +1,4 @@
-From e01126810a00d1d805e4ada64d7084714c914733 Mon Sep 17 00:00:00 2001
+From 0a02ca9a431c6feb33734a23bf03d45841c36902 Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Mon, 18 Oct 2021 11:23:33 +0200
 Subject: [PATCH 2/6] ObjectPicker: markDirty(AllDirty) when we change the
@@ -48,5 +48,5 @@ index 182e1af55..cc2ebbf15 100644
  
  void ObjectPicker::notifyJob()
 -- 
-2.37.2
+2.38.1
 

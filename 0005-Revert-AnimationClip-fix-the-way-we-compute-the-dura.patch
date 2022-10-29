@@ -1,4 +1,4 @@
-From 19c8baf00b41170f68629a92a56467fe676ce074 Mon Sep 17 00:00:00 2001
+From b9fa7431f5384f8c0b2457aa7019cc148eab4920 Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Thu, 25 Nov 2021 15:52:09 +0100
 Subject: [PATCH 5/6] Revert "AnimationClip: fix the way we compute the
@@ -45,5 +45,5 @@ index c72e41157..78152c5bc 100644
  
  int AnimationClip::findChannelComponentCount()
 -- 
-2.37.2
+2.38.1
 

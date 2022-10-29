@@ -1,4 +1,4 @@
-From fe5fca853c09c7e03a2ff66dac21584e3307984d Mon Sep 17 00:00:00 2001
+From 0ff905d194e273e04e95b72dbbfd4e58193ecbaa Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Fri, 26 Nov 2021 11:47:23 +0100
 Subject: [PATCH 6/6] OpenGL renderer: restore surface on context when shutting
@@ -110,5 +110,5 @@ index 7b1fbb92d..4de847bf3 100644
          qWarning() << "Failed to make context current: OpenGL resources will not be destroyed";
      }
 -- 
-2.37.2
+2.38.1
 

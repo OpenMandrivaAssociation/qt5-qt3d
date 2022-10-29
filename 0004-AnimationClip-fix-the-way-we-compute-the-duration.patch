@@ -1,4 +1,4 @@
-From 41f4e7f5d3e4583d6390a300df6638797631b568 Mon Sep 17 00:00:00 2001
+From e08d11a8217d66a487af2604443ece25f7fa0be0 Mon Sep 17 00:00:00 2001
 From: Paul Lemire <paul.lemire@kdab.com>
 Date: Tue, 23 Nov 2021 09:27:43 +0100
 Subject: [PATCH 4/6] AnimationClip: fix the way we compute the duration
@@ -43,5 +43,5 @@ index 2c7e4fffb..c72e41157 100644
  
  int AnimationClip::findChannelComponentCount()
 -- 
-2.37.2
+2.38.1
 
