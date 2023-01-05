@@ -26,7 +26,7 @@
 
 Summary:	Qt 3D toolkit
 Name:		qt5-qt3d
-Version:	5.15.7
+Version:	5.15.8
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
 URL:		http://www.qt.io/
@@ -39,14 +39,9 @@ Release:	1
 %define qttarballdir qt3d-everywhere-opensource-src-%{version}
 Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
 %endif
-Patch0:		qt3d-clang10.patch
+#Patch0:		qt3d-clang10.patch
 # From KDE https://invent.kde.org/qt/qt/qt3d -b kde/5.15
-Patch1000:	0001-ComputeCommand-call-markDirty-ComputeDirty-when-enab.patch
-Patch1001:	0002-ObjectPicker-markDirty-AllDirty-when-we-change-the-e.patch
-Patch1002:	0003-OpenGL-Fix-content-not-updated-when-using-OnDemand-a.patch
-Patch1003:	0004-AnimationClip-fix-the-way-we-compute-the-duration.patch
-Patch1004:	0005-Revert-AnimationClip-fix-the-way-we-compute-the-dura.patch
-Patch1005:	0006-OpenGL-renderer-restore-surface-on-context-when-shut.patch
+# [currently nothing]
 BuildRequires:	qmake5 >= %{version}
 BuildRequires:	pkgconfig(Qt5Core) >= %{version}
 BuildRequires:	pkgconfig(Qt5Gui) >= %{version}
