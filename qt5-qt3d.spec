@@ -35,7 +35,7 @@ Release:	0.%{beta}.1
 %define qttarballdir qt3d-everywhere-src-%{version}-%{beta}
 Source0:	http://download.qt.io/development_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}%{?beta:-%{beta}}/submodules/%{qttarballdir}.tar.xz
 %else
-Release:	1
+Release:	2
 %define qttarballdir qt3d-everywhere-opensource-src-%{version}
 Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
 %endif
@@ -386,7 +386,7 @@ Development files for the Qt3D renderer library.
 %package -n %{extrasd}
 Summary:	Development files for the Qt3DExtras library
 Group:		Development/KDE and Qt
-Requires:	%{mklibname Qt53DExtras 5} = %{EVRD}
+Requires:	%{mklibname Qt53DExtras} = %{EVRD}
 
 %description -n %{extrasd}
 Development files for the Qt3DExtras library.
@@ -403,7 +403,7 @@ Development files for the Qt3DExtras library.
 %package -n %{quickextrasd}
 Summary:	Development files for the Qt3DQuickExtras library
 Group:		Development/KDE and Qt
-Requires:	%{mklibname Qt53DQuickExtras 5} = %{EVRD}
+Requires:	%{mklibname Qt53DQuickExtras} = %{EVRD}
 
 %description -n %{quickextrasd}
 Development files for the Qt3DQuickExtras library.
