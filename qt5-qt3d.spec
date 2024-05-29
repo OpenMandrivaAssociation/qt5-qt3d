@@ -24,9 +24,11 @@
 %define extrasd %mklibname qt%{major}3dextras -d
 %define quickextrasd %mklibname qt%{major}3dquickextras -d
 
+%global build_ldflags %{build_ldflags} -Wl,--undefined-version
+
 Summary:	Qt 3D toolkit
 Name:		qt5-qt3d
-Version:	5.15.11
+Version:	5.15.14
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
 URL:		http://www.qt.io/
