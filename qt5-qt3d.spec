@@ -31,7 +31,7 @@ Name:		qt5-qt3d
 Version:	5.15.15
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
-URL:		http://www.qt.io/
+URL:		https://www.qt.io/
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 %define qttarballdir qt3d-everywhere-src-%{version}-%{beta}
