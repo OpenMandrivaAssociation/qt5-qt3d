@@ -28,7 +28,7 @@
 
 Summary:	Qt 3D toolkit
 Name:		qt5-qt3d
-Version:	5.15.15
+Version:	5.15.18
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
 URL:		https://www.qt.io/
