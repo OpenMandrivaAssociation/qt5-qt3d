@@ -28,7 +28,7 @@
 
 Summary:	Qt 3D toolkit
 Name:		qt5-qt3d
-Version:	5.15.18
+Version:	5.15.19
 Group:		System/Libraries
 License:	LGPLv2 with exceptions or GPLv3 with exceptions and GFDL
 URL:		https://www.qt.io/
@@ -39,7 +39,7 @@ Source0:	http://download.qt.io/development_releases/qt/%(echo %{version}|cut -d.
 %else
 Release:	1
 %define qttarballdir qt3d-everywhere-opensource-src-%{version}
-Source0:	http://download.qt.io/official_releases/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
+Source0:	http://download.qt.io/archive/qt/%(echo %{version}|cut -d. -f1-2)/%{version}/submodules/%{qttarballdir}.tar.xz
 %endif
 #Patch0:		qt3d-clang10.patch
 # From KDE https://invent.kde.org/qt/qt/qt3d -b kde/5.15
